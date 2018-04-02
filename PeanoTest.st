@@ -1,0 +1,73 @@
+!classDefinition: #PeanoTest category: #PeanoTest!
+DenotativeObject subclass: #PeanoTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PeanoTest'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PeanoTest class' category: #PeanoTest!
+PeanoTest class
+	instanceVariableNames: ''!
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'ARM 3/26/2018 12:51:26'!
+test01UnoMasUnSumandoEsElProximoDelSumando
+
+	Assert that: I + II isEqualTo: II next.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/1/2018 03:58:20'!
+test02NumerosMayoresaUnoSumanBien
+	Assert that: II + II isEqualTo: IIII.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'ARM 3/26/2018 13:12:19'!
+test03UnNumeroMenosUnoEsElPrevioDelNumero
+
+	Assert that: II - I isEqualTo: II previous.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/1/2018 03:58:38'!
+test04NumerosMayoresaUnoRestanBien
+	Assert that: IIII - II isEqualTo: II.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/1/2018 04:14:34'!
+test05RestaNoSoportaNumerosNegativos
+
+	Assert should: [ I - II ] signal: Error withDescription: I descripcionDeErrorDeNumerosNegativosNoSoportados.
+! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'ARM 3/26/2018 13:15:53'!
+test06UnNumeroMultiplicadoPorUnoEsIgualAlNumero
+
+	Assert that: II * I isEqualTo: II.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/1/2018 03:59:24'!
+test07NumerosMayoresaUnoMultiplicanBien
+	Assert that: II * II isEqualTo: IIII.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'ARM 3/26/2018 13:16:46'!
+test08UnoMultiplicadoUnoEsIgualAUno
+
+	Assert that: I * I isEqualTo: I.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/1/2018 03:57:54'!
+test09NumerosMayoresaUnoDividenBien
+
+	Assert that: IIII / II isEqualTo: II. ! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'ARM 3/26/2018 13:17:28'!
+test10UnNumeroDivididoUnoEsIgualAlNumero
+
+	Assert that: II / I isEqualTo: II.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'ARM 3/26/2018 13:17:38'!
+test11UnoDivididoUnoEsIgualAUno
+
+	Assert that: I / I isEqualTo: I.! !
+
+!PeanoTest class methodsFor: 'as yet unclassified' stamp: 'ARM 3/26/2018 13:17:59'!
+test12DivisionNoSoportaDividirPorUnNumeroMayor
+
+	Assert should: [ III /  IIII ] signal: Error withDescription: II descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor.
+	
+	Assert should: [ I /  II] signal: Error withDescription: I descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
+! !
