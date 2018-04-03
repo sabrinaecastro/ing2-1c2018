@@ -111,5 +111,135 @@ removeNext
 	next:=nil! !
 
 II instVarNamed: 'previous' put: I!
-II instVarNamed: 'next' put: nil!
+II instVarNamed: 'next' put: III!
 II instVarNamed: 'noSePuedeDividirPorUnNumeroMayor' put: nil!
+
+!classDefinition: #III category: #NumerosPeano!
+DenotativeObject subclass: #III
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'NumerosPeano'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'III class' category: #NumerosPeano!
+III class
+	instanceVariableNames: 'previous next noSePuedeDividirPorUnNumeroMayor'!
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+* unNumerodePeano
+	^ ((self previous) * unNumerodePeano) + unNumerodePeano ! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
++ unNumerodePeano
+	^self previous + unNumerodePeano next.! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+- unNumerodePeano
+	unNumerodePeano caseOf: { [I] -> [^self previous]} otherwise: [^(self previous) - unNumerodePeano previous ]! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+/ unNumerodePeano
+	unNumerodePeano caseOf: {[self] -> [^I]. } otherwise:[ ^(I + ((self - unNumerodePeano) / unNumerodePeano)) ].! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
+	^ noSePuedeDividirPorUnNumeroMayor! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+next
+	| n |
+	n := next caseOf: {[nil] -> [self cloneNamed: (self name, 'I').]} otherwise: [next].
+	n previous: self.
+	next _ n.
+	^next.! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+previous
+	^previous.! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+previous: a
+	previous := a.! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+removeAllNext
+	next ifNotNil:[
+		next removeAllNext.
+		next removeFromSystem.
+		next := nil.
+		].! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:49:58'!
+removeNext
+	next:=nil! !
+
+III instVarNamed: 'previous' put: II!
+III instVarNamed: 'next' put: IIII!
+III instVarNamed: 'noSePuedeDividirPorUnNumeroMayor' put: nil!
+
+!classDefinition: #IIII category: #NumerosPeano!
+DenotativeObject subclass: #IIII
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'NumerosPeano'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'IIII class' category: #NumerosPeano!
+IIII class
+	instanceVariableNames: 'previous next noSePuedeDividirPorUnNumeroMayor'!
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+* unNumerodePeano
+	^ ((self previous) * unNumerodePeano) + unNumerodePeano ! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
++ unNumerodePeano
+	^self previous + unNumerodePeano next.! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+- unNumerodePeano
+	unNumerodePeano caseOf: { [I] -> [^self previous]} otherwise: [^(self previous) - unNumerodePeano previous ]! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+/ unNumerodePeano
+	unNumerodePeano caseOf: {[self] -> [^I]. } otherwise:[ ^(I + ((self - unNumerodePeano) / unNumerodePeano)) ].! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
+	^ noSePuedeDividirPorUnNumeroMayor! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+next
+	| n |
+	n := next caseOf: {[nil] -> [self cloneNamed: (self name, 'I').]} otherwise: [next].
+	n previous: self.
+	next _ n.
+	^next.! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+previous
+	^previous.! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+previous: a
+	previous := a.! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+removeAllNext
+	next ifNotNil:[
+		next removeAllNext.
+		next removeFromSystem.
+		next := nil.
+		].! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'sabrina castro 4/2/2018 18:50:04'!
+removeNext
+	next:=nil! !
+
+IIII instVarNamed: 'previous' put: III!
+IIII instVarNamed: 'next' put: nil!
+IIII instVarNamed: 'noSePuedeDividirPorUnNumeroMayor' put: nil!
