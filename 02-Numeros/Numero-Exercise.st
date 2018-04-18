@@ -282,25 +282,21 @@ initalizeWith: aValue
 	value := aValue! !
 
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'MG 4/17/2018 12:42:33'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:19:13'!
 * aMultiplier 
-	aMultiplier class = Entero ifTrue: [^self class with: value * aMultiplier integerValue]. 
-	aMultiplier class = Fraccion ifTrue: [^(Entero with: (value * aMultiplier numerator integerValue)) / aMultiplier denominator ]. 
-	self error:'No se puede multiplicar'.! !
-
-!Entero methodsFor: 'arithmetic operations' stamp: 'MG 4/16/2018 21:31:00'!
-+ anAdder 
 	
-	anAdder class = Fraccion ifTrue: [ ^ Fraccion with: (self * anAdder denominator + anAdder numerator) value over: (anAdder denominator) value].
-	anAdder class = Entero ifTrue: [ ^ Entero with: value + anAdder integerValue].
-	self error: 'No se puede sumar'
-! !
+	^aMultiplier productoConEntero: self.	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'MG 4/17/2018 13:04:04'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:11:57'!
++ anAdder 
+	^ anAdder sumaConEntero: self.! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:52:29'!
 / aDivisor 
 	(aDivisor isKindOf: Entero) ifTrue:[ ^Fraccion with: self over: aDivisor ].
 	(aDivisor isKindOf: Fraccion) ifTrue: [ ^ self * (Fraccion with: aDivisor denominator over: aDivisor numerator) ].
-	self error: 'No se puede dividir'.! !
+	self error: 'No se puede dividir'.
+! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:55'!
 // aDivisor 
@@ -311,6 +307,26 @@ initalizeWith: aValue
 greatestCommonDivisorWith: anEntero 
 	
 	^self class with: (value gcd: anEntero integerValue)! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:25:05'!
+invertir
+	^ Fraccion with: (Entero with: 1) over:(Entero with: value).! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:18:00'!
+productoConEntero: aMultiplier
+	^self class with: value * aMultiplier integerValue.! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:18:31'!
+productoConFraccion: aMultiplier
+	^(Entero with: (value * aMultiplier numerator integerValue)) / aMultiplier denominator.! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:11:21'!
+sumaConEntero: anAdder
+   ^Entero with: (value + (anAdder integerValue)) .! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:11:39'!
+sumaConFraccion: anAdder
+  ^ Fraccion with: (self * anAdder denominator + anAdder numerator) value over: (anAdder denominator) value. ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -367,36 +383,44 @@ hash
 	^(numerator hash / denominator hash) hash! !
 
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'MG 4/17/2018 12:49:29'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:19:38'!
 * aMultiplier 
-	(aMultiplier isKindOf: Fraccion) ifTrue: [
-	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator)
-	].
-	(aMultiplier isKindOf: Entero) ifTrue: [
-		^(numerator * aMultiplier) / denominator
-	].
-	self error: 'No se puede multiplicar'
+	
+	^aMultiplier productoConFraccion: self.
 	! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'MG 4/16/2018 21:37:07'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:14:07'!
 + anAdder 
 	
-	| newNumerator newDenominator |
-	anAdder class = Fraccion ifTrue:[
-		
+	^ anAdder sumaConFraccion: self.! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:30:47'!
+/ aDivisor
+	^ (aDivisor  invertir) productoConFraccion: self.! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:20:09'!
+invertir
+	^ (self denominator) / (self numerator ).! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:16:33'!
+productoConEntero: aMultiplier
+	^(numerator * aMultiplier) / denominator.! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:17:32'!
+productoConFraccion: aMultiplier
+	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator).! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:13:13'!
+sumaConEntero: anAdder 
+ 	^Fraccion with: (anAdder * self denominator + self numerator) value over: (self denominator) value.! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:13:33'!
+sumaConFraccion: anAdder 
+ 	| newDenominator newNumerator |
 	newNumerator := (numerator * anAdder denominator) + (denominator * anAdder numerator).
 	newDenominator := denominator * anAdder denominator.
 	
-	^newNumerator / newDenominator 
-	].
-	anAdder class = Entero ifTrue: [^ Fraccion with: (anAdder * self denominator + self numerator) value over: (self denominator) value].
-	self error:'No se puede sumar'! !
-
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'MG 4/17/2018 13:09:02'!
-/ aDivisor 
-	(aDivisor isKindOf: Entero) ifTrue: [ ^ Fraccion with: numerator over: (denominator * aDivisor)].
-	(aDivisor isKindOf: Fraccion) ifTrue: [^(numerator * aDivisor denominator) / (denominator * aDivisor numerator)].
-	self error: 'No se puede dividir'.! !
+	^newNumerator / newDenominator.! !
 
 
 !Fraccion methodsFor: 'accessing' stamp: 'HernanWilkinson 5/7/2016 21:56'!
