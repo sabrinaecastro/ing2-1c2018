@@ -291,17 +291,22 @@ initalizeWith: aValue
 + anAdder 
 	^ anAdder sumaConEntero: self.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:52:29'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 20:19:49'!
 / aDivisor 
-	(aDivisor isKindOf: Entero) ifTrue:[ ^Fraccion with: self over: aDivisor ].
-	(aDivisor isKindOf: Fraccion) ifTrue: [ ^ self * (Fraccion with: aDivisor denominator over: aDivisor numerator) ].
-	self error: 'No se puede dividir'.
-! !
+	^ aDivisor dividendoEsUnEntero: self.! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:55'!
 // aDivisor 
 	
 	^self class with: value // aDivisor integerValue! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 20:20:11'!
+dividendoEsUnEntero: aDividendo
+	^Fraccion with: aDividendo over: self. ! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 20:30:39'!
+dividendoEsUnaFraccion: aDividendo
+	^Fraccion with: aDividendo numerator over:self * aDividendo denominator  . ! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:00'!
 greatestCommonDivisorWith: anEntero 
@@ -394,9 +399,17 @@ hash
 	
 	^ anAdder sumaConFraccion: self.! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:30:47'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 20:28:10'!
 / aDivisor
-	^ (aDivisor  invertir) productoConFraccion: self.! !
+	^ aDivisor dividendoEsUnaFraccion: self.! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 20:16:49'!
+dividendoEsUnEntero: aDividendo
+	^Fraccion with:(aDividendo value * denominator) value  over: numerator. 	! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 20:27:16'!
+dividendoEsUnaFraccion: aDividendo
+	^Fraccion with: aDividendo numerator * self denominator over: aDividendo denominator * self numerator. ! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:20:09'!
 invertir
