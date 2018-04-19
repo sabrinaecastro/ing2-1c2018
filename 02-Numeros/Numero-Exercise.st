@@ -313,10 +313,6 @@ greatestCommonDivisorWith: anEntero
 	
 	^self class with: (value gcd: anEntero integerValue)! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:25:05'!
-invertir
-	^ Fraccion with: (Entero with: 1) over:(Entero with: value).! !
-
 !Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:18:00'!
 productoConEntero: aMultiplier
 	^self class with: value * aMultiplier integerValue.! !
@@ -410,10 +406,6 @@ dividendoEsUnEntero: aDividendo
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 20:27:16'!
 dividendoEsUnaFraccion: aDividendo
 	^Fraccion with: aDividendo numerator * self denominator over: aDividendo denominator * self numerator. ! !
-
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:20:09'!
-invertir
-	^ (self denominator) / (self numerator ).! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:16:33'!
 productoConEntero: aMultiplier
