@@ -207,10 +207,34 @@ Object subclass: #Numero
 
 	self subclassResponsibility ! !
 
+!Numero methodsFor: 'arithmetic operations' stamp: 'MG 4/23/2018 14:11:35'!
+dividendoEsUnEntero: unEntero
+	^self subclassResponsibility ! !
+
+!Numero methodsFor: 'arithmetic operations' stamp: 'MG 4/23/2018 14:11:53'!
+dividendoEsUnaFraccion: unaFraccion
+	^self subclassResponsibility ! !
+
 !Numero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 22:48'!
 invalidNumberType
 
 	self error: self class invalidNumberTypeErrorDescription! !
+
+!Numero methodsFor: 'arithmetic operations' stamp: 'MG 4/23/2018 14:09:58'!
+productoConEntero: unEntero
+	^self subclassResponsibility ! !
+
+!Numero methodsFor: 'arithmetic operations' stamp: 'MG 4/23/2018 14:10:13'!
+productoConFraccion: unaFraccion
+	^self subclassResponsibility ! !
+
+!Numero methodsFor: 'arithmetic operations' stamp: 'MG 4/23/2018 14:09:07'!
+sumaConEntero: unEntero
+	^self subclassResponsibility ! !
+
+!Numero methodsFor: 'arithmetic operations' stamp: 'MG 4/23/2018 14:09:40'!
+sumaConFraccion: unaFraccion
+	^self subclassResponsibility ! !
 
 
 !Numero methodsFor: 'testing' stamp: 'HernanWilkinson 5/7/2016 22:49'!
@@ -317,17 +341,17 @@ greatestCommonDivisorWith: anEntero
 productoConEntero: aMultiplier
 	^self class with: value * aMultiplier integerValue.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:18:31'!
-productoConFraccion: aMultiplier
-	^(Entero with: (value * aMultiplier numerator integerValue)) / aMultiplier denominator.! !
+!Entero methodsFor: 'arithmetic operations' stamp: 'MG 4/23/2018 13:31:59'!
+productoConFraccion: unaFraccion
+	^ unaFraccion productoConEntero: self.! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:11:21'!
 sumaConEntero: anAdder
    ^Entero with: (value + (anAdder integerValue)) .! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'sabrina castro 4/18/2018 01:11:39'!
-sumaConFraccion: anAdder
-  ^ Fraccion with: (self * anAdder denominator + anAdder numerator) value over: (anAdder denominator) value. ! !
+!Entero methodsFor: 'arithmetic operations' stamp: 'MG 4/23/2018 13:38:22'!
+sumaConFraccion: unaFraccion
+  ^ unaFraccion sumaConEntero: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
