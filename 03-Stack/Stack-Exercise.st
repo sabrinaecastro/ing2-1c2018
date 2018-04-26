@@ -139,39 +139,39 @@ test10CanNotTopWhenThereAreNoObjectsInTheStack
 
 !classDefinition: #OOStack category: #'Stack-Exercise'!
 Object subclass: #OOStack
-	instanceVariableNames: 'elems'
+	instanceVariableNames: 'firtStack'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'operaciones' stamp: 'MG 4/26/2018 00:07:39'!
+!OOStack methodsFor: 'operaciones' stamp: 'sc 4/25/2018 23:54:29'!
 isEmpty
-	^elems size = 1.! !
+	^firtStack isEmpty.! !
 
-!OOStack methodsFor: 'operaciones' stamp: 'sc 4/23/2018 17:19:22'!
+!OOStack methodsFor: 'operaciones' stamp: 'sc 4/26/2018 01:40:26'!
 pop
-	|elem|
-	elem := self top.
-	elems removeFirst.
-	^ elem.! !
+	| t |
+	t := firtStack  top .
+	firtStack := firtStack proximo .
+	^ t.! !
 
-!OOStack methodsFor: 'operaciones' stamp: 'MG 4/26/2018 00:28:16'!
-push: anElement 
-	elems addFirst: (StackElement with:anElement).! !
+!OOStack methodsFor: 'operaciones' stamp: 'sc 4/26/2018 00:32:13'!
+push: aString
+	firtStack := OOStackContenedor agregar: aString with:firtStack .! !
 
-!OOStack methodsFor: 'operaciones' stamp: 'MG 4/26/2018 00:09:40'!
+!OOStack methodsFor: 'operaciones' stamp: 'sx 4/25/2018 23:21:04'!
 size
-	^elems size -1.! !
+	^firtStack size.! !
 
-!OOStack methodsFor: 'operaciones' stamp: 'MG 4/26/2018 00:08:13'!
+!OOStack methodsFor: 'operaciones' stamp: 'sc 4/26/2018 01:08:40'!
 top
-	^(elems first) elementValue.! !
+	^firtStack top.! !
 
 
-!OOStack methodsFor: 'creacion' stamp: 'MG 4/26/2018 00:13:06'!
+!OOStack methodsFor: 'creacion' stamp: 'sx 4/25/2018 23:19:20'!
 initialize
-	elems := OrderedCollection new.
-	elems addFirst: (EmptyStackElement new).! !
+	"elems := OrderedCollection new."
+	firtStack:= OOStackVacio new.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -185,40 +185,66 @@ stackEmptyErrorDescription
 	^ 'Stack is empty'! !
 
 
-!classDefinition: #StackElement category: #'Stack-Exercise'!
-Object subclass: #StackElement
-	instanceVariableNames: 'elementValue'
+!classDefinition: #OOStackContenedor category: #'Stack-Exercise'!
+Object subclass: #OOStackContenedor
+	instanceVariableNames: 'prox otro'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!StackElement methodsFor: 'initialization' stamp: 'MG 4/26/2018 00:01:36'!
-initializeWith: anElement
-	elementValue := anElement.! !
+!OOStackContenedor methodsFor: 'creacion' stamp: 'sc 4/26/2018 01:53:55'!
+agregar: aString with:otroStack
+	prox:=aString .
+	otro  := otroStack .! !
 
 
-!StackElement methodsFor: 'extract' stamp: 'MG 4/26/2018 00:00:14'!
-elementValue
-	^ elementValue.! !
+!OOStackContenedor methodsFor: 'operaciones' stamp: 'sc 4/26/2018 01:54:27'!
+isEmpty
+	^false.! !
+
+!OOStackContenedor methodsFor: 'operaciones' stamp: 'sc 4/26/2018 01:54:40'!
+proximo
+	^ otro .! !
+
+!OOStackContenedor methodsFor: 'operaciones' stamp: 'sc 4/26/2018 01:54:56'!
+size
+	^ otro  size + 1.! !
+
+!OOStackContenedor methodsFor: 'operaciones' stamp: 'sc 4/26/2018 01:55:06'!
+top
+	^ prox .! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'StackElement class' category: #'Stack-Exercise'!
-StackElement class
+!classDefinition: 'OOStackContenedor class' category: #'Stack-Exercise'!
+OOStackContenedor class
 	instanceVariableNames: ''!
 
-!StackElement class methodsFor: 'creation' stamp: 'MG 4/26/2018 00:17:27'!
-with: anElement
-	^(StackElement new) initializeWith: anElement.! !
+!OOStackContenedor class methodsFor: 'as yet unclassified' stamp: 'sc 4/26/2018 00:29:19'!
+agregar: aString with:otroStack
+	^ self new agregar:aString  with: otroStack.! !
 
 
-!classDefinition: #EmptyStackElement category: #'Stack-Exercise'!
-StackElement subclass: #EmptyStackElement
+!classDefinition: #OOStackVacio category: #'Stack-Exercise'!
+Object subclass: #OOStackVacio
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!EmptyStackElement methodsFor: 'extract' stamp: 'MG 4/26/2018 00:20:43'!
-elementValue
-	^self error: OOStack stackEmptyErrorDescription .! !
+!OOStackVacio methodsFor: 'operaciones' stamp: 'sc 4/25/2018 22:19:36'!
+isEmpty
+	^true.! !
+
+!OOStackVacio methodsFor: 'operaciones' stamp: 'sc 4/26/2018 01:56:45'!
+proximo
+	self error: 'Stack is empty'.! !
+
+!OOStackVacio methodsFor: 'operaciones' stamp: 'sc 4/25/2018 22:19:59'!
+size
+	^0.! !
+
+!OOStackVacio methodsFor: 'operaciones' stamp: 'sc 4/26/2018 01:51:59'!
+top
+	self error: 'Stack is empty'.
+! !
