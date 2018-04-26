@@ -144,9 +144,9 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'operaciones' stamp: 'sc 4/23/2018 16:55:44'!
+!OOStack methodsFor: 'operaciones' stamp: 'MG 4/26/2018 00:07:39'!
 isEmpty
-	^elems isEmpty.! !
+	^elems size = 1.! !
 
 !OOStack methodsFor: 'operaciones' stamp: 'sc 4/23/2018 17:19:22'!
 pop
@@ -155,23 +155,23 @@ pop
 	elems removeFirst.
 	^ elem.! !
 
-!OOStack methodsFor: 'operaciones' stamp: 'sc 4/23/2018 16:58:45'!
-push: aString 
-	elems addFirst: aString.! !
+!OOStack methodsFor: 'operaciones' stamp: 'MG 4/26/2018 00:28:16'!
+push: anElement 
+	elems addFirst: (StackElement with:anElement).! !
 
-!OOStack methodsFor: 'operaciones' stamp: 'sc 4/23/2018 17:19:49'!
+!OOStack methodsFor: 'operaciones' stamp: 'MG 4/26/2018 00:09:40'!
 size
-	^elems size.! !
+	^elems size -1.! !
 
-!OOStack methodsFor: 'operaciones' stamp: 'sc 4/23/2018 17:16:14'!
+!OOStack methodsFor: 'operaciones' stamp: 'MG 4/26/2018 00:08:13'!
 top
-	elems isEmpty  ifTrue: [self error: 'Stack is empty'].
-	^elems first.! !
+	^(elems first) elementValue.! !
 
 
-!OOStack methodsFor: 'creacion' stamp: 'sc 4/23/2018 16:57:40'!
+!OOStack methodsFor: 'creacion' stamp: 'MG 4/26/2018 00:13:06'!
 initialize
-	elems := OrderedCollection new.! !
+	elems := OrderedCollection new.
+	elems addFirst: (EmptyStackElement new).! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -183,3 +183,42 @@ OOStack class
 stackEmptyErrorDescription
 	
 	^ 'Stack is empty'! !
+
+
+!classDefinition: #StackElement category: #'Stack-Exercise'!
+Object subclass: #StackElement
+	instanceVariableNames: 'elementValue'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!StackElement methodsFor: 'initialization' stamp: 'MG 4/26/2018 00:01:36'!
+initializeWith: anElement
+	elementValue := anElement.! !
+
+
+!StackElement methodsFor: 'extract' stamp: 'MG 4/26/2018 00:00:14'!
+elementValue
+	^ elementValue.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'StackElement class' category: #'Stack-Exercise'!
+StackElement class
+	instanceVariableNames: ''!
+
+!StackElement class methodsFor: 'creation' stamp: 'MG 4/26/2018 00:17:27'!
+with: anElement
+	^(StackElement new) initializeWith: anElement.! !
+
+
+!classDefinition: #EmptyStackElement category: #'Stack-Exercise'!
+StackElement subclass: #EmptyStackElement
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!EmptyStackElement methodsFor: 'extract' stamp: 'MG 4/26/2018 00:20:43'!
+elementValue
+	^self error: OOStack stackEmptyErrorDescription .! !
