@@ -403,36 +403,53 @@ balance
 
 !classDefinition: #Portfolio category: #'Portfolio-Ejercicio'!
 SummarizingAccount subclass: #Portfolio
-	instanceVariableNames: ''
+	instanceVariableNames: 'content'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Portfolio-Ejercicio'!
 
-!Portfolio methodsFor: 'balance' stamp: 'sc 5/9/2018 00:19:14'!
+!Portfolio methodsFor: 'balance' stamp: 'sc 5/9/2018 23:33:05'!
 balance
-	self subclassResponsibility ! !
+	|saldo|
+	saldo := 0.
+	content do:[ :aPortfolio | saldo := saldo + aPortfolio balance].
+	^saldo.! !
 
 
-!Portfolio methodsFor: 'testing' stamp: 'sc 5/9/2018 00:31:17'!
+!Portfolio methodsFor: 'testing' stamp: 'sc 5/9/2018 22:56:35'!
 manages: anAccount
-	self subclassResponsibility.
+	^content anySatisfy:[:aPorfolio |  aPorfolio=anAccount | (aPorfolio manages: anAccount) ].
 ! !
 
-!Portfolio methodsFor: 'testing' stamp: 'sc 5/9/2018 01:50:57'!
+!Portfolio methodsFor: 'testing' stamp: 'sc 5/9/2018 22:52:27'!
 registers: aTtransaction
-	^self subclassResponsibility .	
-! !
+	^content anySatisfy: [:aPorfolio | aPorfolio registers: aTtransaction].
+
+	! !
 
 
-!Portfolio methodsFor: 'transactions' stamp: 'sc 5/9/2018 00:37:48'!
+!Portfolio methodsFor: 'transactions' stamp: 'sc 5/9/2018 23:34:04'!
 transactions 
-	self subclassResponsibility .! !
+	|orderTransctions|
+	orderTransctions := OrderedCollection new.
+	content do:[:aPortfolio | orderTransctions addAllFirst: aPortfolio transactions ].
+	^orderTransctions .! !
 
-!Portfolio methodsFor: 'transactions' stamp: 'sc 5/9/2018 00:37:57'!
+!Portfolio methodsFor: 'transactions' stamp: 'sc 5/9/2018 23:28:12'!
 transactionsOf: anAccount 
+	(self manages:anAccount ) ifFalse:[^self error: Portfolio accountNotManagedMessageDescription.]. 
+	^anAccount  transactions .! !
 
-	self subclassResponsibility .! !
 
+!Portfolio methodsFor: 'initialization' stamp: 'sc 5/9/2018 21:49:45'!
+initializeAll:aCollectionOfAccounts
+	content addAllFirst: aCollectionOfAccounts.! !
+
+!Portfolio methodsFor: 'initialization' stamp: 'sc 5/9/2018 21:48:00'!
+initializeWith: anAccount1 with:anAccount2 
+	content := OrderedCollection new.
+	content addFirst: anAccount1.	
+	content addFirst: anAccount2.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -440,106 +457,25 @@ transactionsOf: anAccount
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'sc 5/9/2018 02:22:24'!
-with: anAccount1 with: anAccount2
-	((anAccount1 manages: anAccount2) | (anAccount2 manages: anAccount1)) ifTrue: [^self error: self accountAlreadyManagedErrorMessage].
-	^PortfolioComposed new initializeWith: anAccount2 with:(PortfolioComplex new initializeWith: anAccount1) .
-! !
-
-!Portfolio class methodsFor: 'instance creation' stamp: 'sc 5/9/2018 00:23:32'!
-withAll: aCollectionOfAccounts
-
-	^PortfolioComposed new initializeWith: aCollectionOfAccounts .! !
-
-
-!Portfolio class methodsFor: 'error' stamp: 'sc 5/9/2018 02:19:03'!
+!Portfolio class methodsFor: 'error' stamp: 'sc 5/9/2018 23:29:03'!
 accountAlreadyManagedErrorMessage
 	^'Cuenta ya manejada'.! !
 
-!Portfolio class methodsFor: 'error' stamp: 'sc 5/9/2018 02:08:19'!
+!Portfolio class methodsFor: 'error' stamp: 'sc 5/9/2018 23:23:26'!
 accountNotManagedMessageDescription
 	^'La cuenta no pertecene al Portfolio'.! !
 
-
-!classDefinition: #PortfolioComplex category: #'Portfolio-Ejercicio'!
-Portfolio subclass: #PortfolioComplex
-	instanceVariableNames: 'account'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
 
-!PortfolioComplex methodsFor: 'balance' stamp: 'sc 5/9/2018 00:56:34'!
-balance
-	^account balance.! !
-
-
-!PortfolioComplex methodsFor: 'transactions' stamp: 'sc 5/9/2018 01:44:04'!
-transactions 
-	^account transactions .! !
-
-!PortfolioComplex methodsFor: 'transactions' stamp: 'sc 5/9/2018 02:16:58'!
-transactionsOf: anAccount 
-	(account manages: anAccount) ifFalse: [^self error: Portfolio accountNotManagedMessageDescription.].
-	^ anAccount  transactions.
+!Portfolio class methodsFor: 'instance creation' stamp: 'sc 5/9/2018 23:30:43'!
+with: anAccount1 with: anAccount2
+	((anAccount1 manages: anAccount2) | (anAccount2 manages: anAccount1)) ifTrue: [^self error: self accountAlreadyManagedErrorMessage].
+	^self new initializeWith: anAccount1 with:anAccount2 .
 	! !
 
+!Portfolio class methodsFor: 'instance creation' stamp: 'sc 5/9/2018 21:48:48'!
+withAll: aCollectionOfAccounts
 
-!PortfolioComplex methodsFor: 'testing' stamp: 'sc 5/9/2018 01:29:27'!
-manages: anAccount
-	^account manages: anAccount .! !
-
-!PortfolioComplex methodsFor: 'testing' stamp: 'sc 5/9/2018 01:53:31'!
-registers: aTtransaction
-	^account registers: aTtransaction.	! !
-
-
-!PortfolioComplex methodsFor: 'initialize' stamp: 'sc 5/9/2018 00:49:44'!
-initializeWith: anAccount
-	account := anAccount.
-! !
-
-
-!classDefinition: #PortfolioComposed category: #'Portfolio-Ejercicio'!
-Portfolio subclass: #PortfolioComposed
-	instanceVariableNames: 'composed account'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
-
-!PortfolioComposed methodsFor: 'balance' stamp: 'sc 5/9/2018 01:12:41'!
-balance
-	| saldo |
-	saldo := account  balance value + composed balance.
-	^saldo.! !
-
-
-!PortfolioComposed methodsFor: 'transactions' stamp: 'sc 5/9/2018 01:58:11'!
-transactions 
-	|nueva|
-	nueva:= OrderedCollection new.
-	nueva  addAll: account  transactions.
-	nueva addAll: composed transactions.
-	^nueva.! !
-
-!PortfolioComposed methodsFor: 'transactions' stamp: 'sc 5/9/2018 02:17:09'!
-transactionsOf: anAccount 
-	( (account manages: anAccount)  |  (composed manages: anAccount) )  ifFalse: [^self error: Portfolio accountNotManagedMessageDescription.].	
-	^ anAccount  transactions.! !
-
-
-!PortfolioComposed methodsFor: 'testing' stamp: 'sc 5/9/2018 01:31:36'!
-manages: anAccount
-	^ (self = anAccount ) | (composed manages: anAccount) | (account manages: anAccount) .! !
-
-!PortfolioComposed methodsFor: 'testing' stamp: 'sc 5/9/2018 01:54:12'!
-registers: aTtransaction
-	^(account registers: aTtransaction ) | (composed registers: aTtransaction ).	! !
-
-
-!PortfolioComposed methodsFor: 'initialize' stamp: 'sc 5/9/2018 01:40:27'!
-initializeWith: a with:b
-	composed := a.
-	account :=b.	! !
+	^self new initializeAll:aCollectionOfAccounts.! !
 
 
 !classDefinition: #ReceptiveAccount category: #'Portfolio-Ejercicio'!
