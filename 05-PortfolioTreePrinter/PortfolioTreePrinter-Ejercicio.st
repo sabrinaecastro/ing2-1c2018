@@ -511,20 +511,20 @@ accountSummaryLinesOf: aReceptiveAccount
 	
 	^aReceptiveAccount accountSummary! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/11/2018 00:10:39'!
 accountTransferNetOf: aReceptiveAccount 
 	
-	self shouldBeImplemented ! !
+	^ aReceptiveAccount accountTransferNet.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/11/2018 01:07:20'!
 investmentEarningsOf: aReceptiveAccount 
 	
-	self shouldBeImplemented ! !
+	^aReceptiveAccount investmentEarnings.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/11/2018 00:17:31'!
 investmentNetOf: aReceptiveAccount 
 	
-	self shouldBeImplemented ! !
+	^ aReceptiveAccount investmentNet.! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
@@ -578,6 +578,66 @@ AccountTransaction subclass: #CertificateOfDeposit
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
+!CertificateOfDeposit methodsFor: 'initialization' stamp: 'sc 5/11/2018 00:32:40'!
+initializeWith:aValue during:aNumberOfDays at:aTNA on:anAccount
+	value := aValue .
+	numberOfDays :=aNumberOfDays.
+	tna := aTNA.
+	account  := anAccount .	! !
+
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 00:49:22'!
+investment
+	^value.! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:13:45'!
+investmentEarnings
+	^ value * ((tna/360)* numberOfDays ).! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:15:47'!
+modifyBalance
+	^(-1) * value.! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:23:52'!
+numberOfDay
+	^ numberOfDays.! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:23:35'!
+tna
+	^ tna.! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:23:24'!
+value
+	^ value! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:31:27'!
+valueTransfer
+	^0.! !
+
+
+!CertificateOfDeposit methodsFor: 'description' stamp: 'sc 5/11/2018 01:30:22'!
+descriptionTransaction
+	^'Plazo fijo por ', (self value asString), ' durante ', self numberOfDay asString , ' dias a una tna de ', (self tna *100) asString , '%'.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CertificateOfDeposit class' category: #'PortfolioTreePrinter-Ejercicio'!
+CertificateOfDeposit class
+	instanceVariableNames: ''!
+
+!CertificateOfDeposit class methodsFor: 'instance creation' stamp: 'sc 5/11/2018 00:58:14'!
+for: aValue during: aNumberOfDays at:aTNA on:anAccount
+	^ self new initializeWith:aValue  during:aNumberOfDays  at:aTNA  on:anAccount. 
+! !
+
+!CertificateOfDeposit class methodsFor: 'instance creation' stamp: 'sc 5/11/2018 00:59:10'!
+register: aValue during: aNumberOfDays at:aTNA  on: anAccount
+
+	| withdraw |
+	withdraw := self for: aValue during: aNumberOfDays at:aTNA on:anAccount .
+	anAccount register: withdraw.
+	^withdraw .! !
+
 
 !classDefinition: #Deposit category: #'PortfolioTreePrinter-Ejercicio'!
 AccountTransaction subclass: #Deposit
@@ -592,6 +652,14 @@ initializeFor: aValue
 	value := aValue ! !
 
 
+!Deposit methodsFor: 'value' stamp: 'sc 5/11/2018 00:49:33'!
+investment
+	^0.! !
+
+!Deposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:09:01'!
+investmentEarnings
+	^0.! !
+
 !Deposit methodsFor: 'value' stamp: 'sc 5/10/2018 19:41:06'!
 modifyBalance
 	^value.! !
@@ -600,6 +668,10 @@ modifyBalance
 value
 
 	^ value! !
+
+!Deposit methodsFor: 'value' stamp: 'sc 5/11/2018 00:39:31'!
+valueTransfer
+	^0.! !
 
 
 !Deposit methodsFor: 'description' stamp: 'sc 5/10/2018 21:42:10'!
@@ -657,6 +729,14 @@ initializeFor: aValue from: aTransfer
 	transfer  := aTransfer .! !
 
 
+!DepositTransfer methodsFor: 'value' stamp: 'sc 5/11/2018 00:49:43'!
+investment
+	^0.! !
+
+!DepositTransfer methodsFor: 'value' stamp: 'sc 5/11/2018 01:09:12'!
+investmentEarnings
+	^0.! !
+
 !DepositTransfer methodsFor: 'value' stamp: 'sc 5/10/2018 21:27:16'!
 modifyBalance
 	^value.! !
@@ -669,6 +749,10 @@ transfer
 value
 
 	^ value! !
+
+!DepositTransfer methodsFor: 'value' stamp: 'sc 5/11/2018 00:39:58'!
+valueTransfer
+	^value.! !
 
 
 !DepositTransfer methodsFor: 'description' stamp: 'sc 5/10/2018 21:42:23'!
@@ -725,6 +809,14 @@ initializeFor: aValue
 	value := aValue ! !
 
 
+!Withdraw methodsFor: 'value' stamp: 'sc 5/11/2018 00:49:54'!
+investment
+	^0.! !
+
+!Withdraw methodsFor: 'value' stamp: 'sc 5/11/2018 01:09:30'!
+investmentEarnings
+	^0.! !
+
 !Withdraw methodsFor: 'value' stamp: 'sc 5/10/2018 19:40:29'!
 modifyBalance
 	^(-1) * value.! !
@@ -733,6 +825,10 @@ modifyBalance
 value
 
 	^ value. ! !
+
+!Withdraw methodsFor: 'value' stamp: 'sc 5/11/2018 00:40:16'!
+valueTransfer
+	^0.! !
 
 
 !Withdraw methodsFor: 'description' stamp: 'sc 5/10/2018 21:47:30'!
@@ -795,6 +891,14 @@ initializeFor: aValue from:aTransfer
 	transfer := aTransfer.! !
 
 
+!WithdrawTransfer methodsFor: 'value' stamp: 'sc 5/11/2018 00:50:06'!
+investment
+	^0.! !
+
+!WithdrawTransfer methodsFor: 'value' stamp: 'sc 5/11/2018 01:09:44'!
+investmentEarnings
+	^0.! !
+
 !WithdrawTransfer methodsFor: 'value' stamp: 'sc 5/10/2018 21:27:36'!
 modifyBalance
 	^(-1) * value.! !
@@ -807,6 +911,10 @@ transfer
 value
 
 	^ value. ! !
+
+!WithdrawTransfer methodsFor: 'value' stamp: 'sc 5/11/2018 00:40:40'!
+valueTransfer
+	^(-1) * value.! !
 
 
 !WithdrawTransfer methodsFor: 'description' stamp: 'sc 5/10/2018 21:43:32'!
@@ -999,13 +1107,6 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'sc 5/10/2018 21:45:45'!
-accountSummary
-	|summary|
-	summary := OrderedCollection new.
-   	transactions do:[:aTransaction | summary add: (aTransaction descriptionTransaction) ].
-	^ summary.! !
-
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'sc 5/10/2018 19:41:38'!
 balance
 
@@ -1021,6 +1122,35 @@ register: aTransaction
 transactions 
 
 	^ transactions copy! !
+
+
+!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:18:28'!
+accountSummary
+	|summary|
+	summary := OrderedCollection new.
+   	transactions do:[:aTransaction | summary add: (aTransaction descriptionTransaction) ].
+	^ summary.! !
+
+!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:41:44'!
+accountTransferNet
+	| saldo |
+	saldo := 0.	
+	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction valueTransfer) ].
+	^saldo.! !
+
+!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 01:08:44'!
+investmentEarnings
+	| saldo |
+	saldo := 0.	
+	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction investmentEarnings) ].
+	^saldo.! !
+
+!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:50:33'!
+investmentNet
+	| saldo |
+	saldo := 0.	
+	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction investment) ].
+	^saldo.! !
 
 
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
