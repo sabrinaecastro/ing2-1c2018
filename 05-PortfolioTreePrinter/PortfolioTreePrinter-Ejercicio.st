@@ -506,25 +506,26 @@ test29ReversePortfolioTreePrinterPrintsTheCompositeStartingFromTheLeaves
 	! !
 
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HAW 9/25/2017 21:44:47'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/14/2018 18:05:16'!
 accountSummaryLinesOf: aReceptiveAccount 
 	
-	^aReceptiveAccount accountSummary! !
+	^(AccountSummary for:aReceptiveAccount) value.
+	! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/11/2018 00:10:39'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/14/2018 18:09:17'!
 accountTransferNetOf: aReceptiveAccount 
 	
-	^ aReceptiveAccount accountTransferNet.! !
+	^(AccountTransferNet for:aReceptiveAccount) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/11/2018 01:07:20'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/14/2018 18:11:24'!
 investmentEarningsOf: aReceptiveAccount 
 	
-	^aReceptiveAccount investmentEarnings.! !
+	^(InvestmentEarnings for:aReceptiveAccount) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/11/2018 00:17:31'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/14/2018 18:13:40'!
 investmentNetOf: aReceptiveAccount 
 	
-	^ aReceptiveAccount investmentNet.! !
+	^(InvestmentNet for:aReceptiveAccount) value.! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
@@ -535,6 +536,36 @@ portofolioTreeOf: aPortfolio namingAccountWith: aDictionary
 reversePortofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
 	
 	self shouldBeImplemented ! !
+
+
+!classDefinition: #AccountSummary category: #'PortfolioTreePrinter-Ejercicio'!
+Object subclass: #AccountSummary
+	instanceVariableNames: 'account'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!AccountSummary methodsFor: 'value' stamp: 'sc 5/14/2018 17:59:39'!
+value
+	|summary|
+	summary := OrderedCollection new.
+   	account transactions do:[:aTransaction | summary add: (aTransaction descriptionTransaction) ].
+	^ summary.! !
+
+
+!AccountSummary methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 17:51:32'!
+initializeOf: anAccount 
+	account  := anAccount .! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountSummary class' category: #'PortfolioTreePrinter-Ejercicio'!
+AccountSummary class
+	instanceVariableNames: ''!
+
+!AccountSummary class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 17:49:32'!
+for: anAccount
+	^self new initializeOf: anAccount .! !
 
 
 !classDefinition: #AccountTransaction category: #'PortfolioTreePrinter-Ejercicio'!
@@ -958,6 +989,93 @@ register: aValue on: account from:aTransfer
 	^ withdraw! !
 
 
+!classDefinition: #AccountTransferNet category: #'PortfolioTreePrinter-Ejercicio'!
+Object subclass: #AccountTransferNet
+	instanceVariableNames: 'account'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!AccountTransferNet methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:07:33'!
+initializeOf: anAccount 
+	account  := anAccount .! !
+
+!AccountTransferNet methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:08:49'!
+value
+	| saldo |
+	saldo := 0.	
+	account transactions do:[:aTransaction |  saldo := saldo + (aTransaction valueTransfer) ].
+	^saldo.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountTransferNet class' category: #'PortfolioTreePrinter-Ejercicio'!
+AccountTransferNet class
+	instanceVariableNames: ''!
+
+!AccountTransferNet class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:06:31'!
+for: anAccount
+	^self new initializeOf: anAccount .! !
+
+
+!classDefinition: #InvestmentEarnings category: #'PortfolioTreePrinter-Ejercicio'!
+Object subclass: #InvestmentEarnings
+	instanceVariableNames: 'account'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!InvestmentEarnings methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:10:11'!
+initializeOf: anAccount 
+	account  := anAccount .! !
+
+!InvestmentEarnings methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:10:50'!
+value
+	| saldo |
+	saldo := 0.	
+	account transactions do:[:aTransaction |  saldo := saldo + (aTransaction investmentEarnings) ].
+	^saldo.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'InvestmentEarnings class' category: #'PortfolioTreePrinter-Ejercicio'!
+InvestmentEarnings class
+	instanceVariableNames: ''!
+
+!InvestmentEarnings class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:09:53'!
+for: anAccount
+	^self new initializeOf: anAccount .! !
+
+
+!classDefinition: #InvestmentNet category: #'PortfolioTreePrinter-Ejercicio'!
+Object subclass: #InvestmentNet
+	instanceVariableNames: 'account'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!InvestmentNet methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:12:38'!
+initializeOf: anAccount 
+	account  := anAccount .! !
+
+!InvestmentNet methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:13:06'!
+value
+	| saldo |
+	saldo := 0.	
+	account transactions do:[:aTransaction |  saldo := saldo + (aTransaction investment) ].
+	^saldo.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'InvestmentNet class' category: #'PortfolioTreePrinter-Ejercicio'!
+InvestmentNet class
+	instanceVariableNames: ''!
+
+!InvestmentNet class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:12:01'!
+for: anAccount
+	^self new initializeOf: anAccount .! !
+
+
 !classDefinition: #SummarizingAccount category: #'PortfolioTreePrinter-Ejercicio'!
 Object subclass: #SummarizingAccount
 	instanceVariableNames: ''
@@ -1122,35 +1240,6 @@ register: aTransaction
 transactions 
 
 	^ transactions copy! !
-
-
-!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:18:28'!
-accountSummary
-	|summary|
-	summary := OrderedCollection new.
-   	transactions do:[:aTransaction | summary add: (aTransaction descriptionTransaction) ].
-	^ summary.! !
-
-!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:41:44'!
-accountTransferNet
-	| saldo |
-	saldo := 0.	
-	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction valueTransfer) ].
-	^saldo.! !
-
-!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 01:08:44'!
-investmentEarnings
-	| saldo |
-	saldo := 0.	
-	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction investmentEarnings) ].
-	^saldo.! !
-
-!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:50:33'!
-investmentNet
-	| saldo |
-	saldo := 0.	
-	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction investment) ].
-	^saldo.! !
 
 
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
