@@ -532,10 +532,10 @@ portofolioTreeOf: aPortfolio namingAccountWith: aDictionary
 	
 	^(PortfolioTree with:aPortfolio  namingAccountWith: aDictionary) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/15/2018 16:34:29'!
 reversePortofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
 	
-	self shouldBeImplemented ! !
+	^(ReversePortofolioTree with:aPortfolio  namingAccountWith: aDictionary) value.! !
 
 
 !classDefinition: #PortfolioTree category: #'PortfolioTreePrinter-Ejercicio'!
@@ -545,17 +545,15 @@ TestCase subclass: #PortfolioTree
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:55:13'!
+!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 14:35:11'!
 initializeWith: aPortfolio namingAccountWith: aDictionary
-	|childens|
 	port := aPortfolio.
-	childens := OrderedCollection new.
-	aDictionary do:[:element | childens addLast:element ]	.
-	dicc := childens .! !
+	dicc := aDictionary .! !
 
-!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 19:29:36'!
+!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 15:22:08'!
 value
-	"retirnar la coleccion de print"! !
+	"retirnar la coleccion de print"
+	^port treePrint: dicc .! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -564,6 +562,35 @@ PortfolioTree class
 	instanceVariableNames: ''!
 
 !PortfolioTree class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:32:35'!
+with: aPortfolio namingAccountWith: aDictionary
+	^self new initializeWith: aPortfolio namingAccountWith: aDictionary.
+! !
+
+
+!classDefinition: #ReversePortofolioTree category: #'PortfolioTreePrinter-Ejercicio'!
+TestCase subclass: #ReversePortofolioTree
+	instanceVariableNames: 'port dicc'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!ReversePortofolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 16:31:50'!
+initializeWith: aPortfolio namingAccountWith: aDictionary
+	port := aPortfolio.
+	dicc := aDictionary .! !
+
+!ReversePortofolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 16:42:06'!
+value
+	"retirnar la coleccion de print"
+	^port treePrintReverse: dicc .! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ReversePortofolioTree class' category: #'PortfolioTreePrinter-Ejercicio'!
+ReversePortofolioTree class
+	instanceVariableNames: ''!
+
+!ReversePortofolioTree class methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 16:31:50'!
 with: aPortfolio namingAccountWith: aDictionary
 	^self new initializeWith: aPortfolio namingAccountWith: aDictionary.
 ! !
@@ -1187,6 +1214,21 @@ initializeWithAll: aCollectionOfAccounts
 
 	accounts := aCollectionOfAccounts   ! !
 
+
+!Portfolio methodsFor: 'print' stamp: 'sc 5/15/2018 16:26:50'!
+treePrint: aDicctionary
+	|tree|
+	tree := OrderedCollection new.
+	accounts do:[:element | tree addAllLast: ((element treePrint: aDicctionary) collect:[:e | ' ',( e asString) ])].
+	
+	tree addFirst: (aDicctionary at: self). 
+	^tree.
+	! !
+
+!Portfolio methodsFor: 'print' stamp: 'sc 5/15/2018 16:41:18'!
+treePrintReverse: aDicctionary
+	^(self treePrint:aDicctionary) reverse.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: #'PortfolioTreePrinter-Ejercicio'!
@@ -1284,6 +1326,14 @@ registers: aTtransaction
 
 	^ transactions includes: aTtransaction 
 ! !
+
+
+!ReceptiveAccount methodsFor: 'print' stamp: 'sc 5/15/2018 15:53:06'!
+treePrint: aDicctionary
+	|tree|
+	tree := OrderedCollection new.
+	tree add: (aDicctionary at: self).
+	^tree.! !
 
 
 !classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
