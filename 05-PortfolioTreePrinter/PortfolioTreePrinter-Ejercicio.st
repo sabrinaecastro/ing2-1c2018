@@ -506,7 +506,7 @@ test29ReversePortfolioTreePrinterPrintsTheCompositeStartingFromTheLeaves
 	! !
 
 
-!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/14/2018 18:05:16'!
+!PortfolioTest methodsFor: 'test support' stamp: 'sc 5/16/2018 17:24:06'!
 accountSummaryLinesOf: aReceptiveAccount 
 	
 	^(AccountSummary for:aReceptiveAccount) value.
@@ -545,14 +545,14 @@ TestCase subclass: #PortfolioTree
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 14:35:11'!
+!PortfolioTree methodsFor: 'initialization' stamp: 'sc 5/16/2018 15:56:40'!
 initializeWith: aPortfolio namingAccountWith: aDictionary
 	port := aPortfolio.
 	dicc := aDictionary .! !
 
-!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 15:22:08'!
+
+!PortfolioTree methodsFor: 'evaluating' stamp: 'sc 5/16/2018 17:37:56'!
 value
-	"retirnar la coleccion de print"
 	^port treePrint: dicc .! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -561,10 +561,9 @@ value
 PortfolioTree class
 	instanceVariableNames: ''!
 
-!PortfolioTree class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:32:35'!
+!PortfolioTree class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 17:43:27'!
 with: aPortfolio namingAccountWith: aDictionary
-	^self new initializeWith: aPortfolio namingAccountWith: aDictionary.
-! !
+	^self new initializeWith: aPortfolio namingAccountWith: aDictionary.! !
 
 
 !classDefinition: #ReversePortofolioTree category: #'PortfolioTreePrinter-Ejercicio'!
@@ -574,14 +573,14 @@ TestCase subclass: #ReversePortofolioTree
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!ReversePortofolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 16:31:50'!
+!ReversePortofolioTree methodsFor: 'initialization' stamp: 'sc 5/16/2018 17:39:48'!
 initializeWith: aPortfolio namingAccountWith: aDictionary
 	port := aPortfolio.
 	dicc := aDictionary .! !
 
-!ReversePortofolioTree methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 16:42:06'!
+
+!ReversePortofolioTree methodsFor: 'evaluating' stamp: 'sc 5/16/2018 17:40:58'!
 value
-	"retirnar la coleccion de print"
 	^port treePrintReverse: dicc .! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -590,10 +589,9 @@ value
 ReversePortofolioTree class
 	instanceVariableNames: ''!
 
-!ReversePortofolioTree class methodsFor: 'as yet unclassified' stamp: 'sc 5/15/2018 16:31:50'!
+!ReversePortofolioTree class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 17:44:39'!
 with: aPortfolio namingAccountWith: aDictionary
-	^self new initializeWith: aPortfolio namingAccountWith: aDictionary.
-! !
+	^self new initializeWith: aPortfolio namingAccountWith: aDictionary.! !
 
 
 !classDefinition: #AccountSummary category: #'PortfolioTreePrinter-Ejercicio'!
@@ -603,15 +601,14 @@ Object subclass: #AccountSummary
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!AccountSummary methodsFor: 'value' stamp: 'sc 5/14/2018 17:59:39'!
-value
-	|summary|
-	summary := OrderedCollection new.
-   	account transactions do:[:aTransaction | summary add: (aTransaction descriptionTransaction) ].
-	^ summary.! !
+!AccountSummary methodsFor: 'evaluating' stamp: 'sc 5/16/2018 17:04:12'!
+value		
+		^ account transactions 
+		inject: OrderedCollection new 
+		into: [ :descriptions :aTransaction | descriptions add: aTransaction descriptionTransaction. descriptions ]! !
 
 
-!AccountSummary methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 17:51:32'!
+!AccountSummary methodsFor: 'initialization' stamp: 'sc 5/16/2018 15:42:58'!
 initializeOf: anAccount 
 	account  := anAccount .! !
 
@@ -621,7 +618,7 @@ initializeOf: anAccount
 AccountSummary class
 	instanceVariableNames: ''!
 
-!AccountSummary class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 17:49:32'!
+!AccountSummary class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 15:31:53'!
 for: anAccount
 	^self new initializeOf: anAccount .! !
 
@@ -638,9 +635,8 @@ modifyBalance
 	self subclassResponsibility .
 	! !
 
-!AccountTransaction methodsFor: 'evaluating' stamp: 'HernanWilkinson 7/14/2011 06:48'!
+!AccountTransaction methodsFor: 'evaluating' stamp: 'sc 5/16/2018 16:14:22'!
 value
-
 	self subclassResponsibility ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -714,17 +710,17 @@ descriptionTransaction
 CertificateOfDeposit class
 	instanceVariableNames: ''!
 
-!CertificateOfDeposit class methodsFor: 'instance creation' stamp: 'sc 5/11/2018 00:58:14'!
+!CertificateOfDeposit class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 17:07:21'!
 for: aValue during: aNumberOfDays at:aTNA on:anAccount
-	^ self new initializeWith:aValue  during:aNumberOfDays  at:aTNA  on:anAccount. 
-! !
+	^ self new initializeWith:aValue  during:aNumberOfDays  at:aTNA  on:anAccount. ! !
 
-!CertificateOfDeposit class methodsFor: 'instance creation' stamp: 'sc 5/11/2018 00:59:10'!
+!CertificateOfDeposit class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 17:09:31'!
 register: aValue during: aNumberOfDays at:aTNA  on: anAccount
-
 	| withdraw |
+	
 	withdraw := self for: aValue during: aNumberOfDays at:aTNA on:anAccount .
 	anAccount register: withdraw.
+	
 	^withdraw .! !
 
 
@@ -753,9 +749,8 @@ investmentEarnings
 modifyBalance
 	^value.! !
 
-!Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+!Deposit methodsFor: 'value' stamp: 'sc 5/16/2018 16:15:43'!
 value
-
 	^ value! !
 
 !Deposit methodsFor: 'value' stamp: 'sc 5/11/2018 00:39:31'!
@@ -773,32 +768,16 @@ descriptionTransaction
 Deposit class
 	instanceVariableNames: ''!
 
-!Deposit class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:38'!
-for: aValue
+!Deposit class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 17:11:56'!
+for: aValue 
+	^ self new initializeFor: aValue.! !
 
-	^ self new initializeFor: aValue ! !
-
-!Deposit class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 20:49:31'!
-for: aValue from:aTransfer
-
-	^ self new initializeFor: aValue from:aTransfer.! !
-
-!Deposit class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 19:41'!
-register: aValue on: account
+!Deposit class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 17:12:08'!
+register: aValue on: account 
 
 	| withdraw |
 	
 	withdraw := self for: aValue.
-	account register: withdraw.
-		
-	^ withdraw! !
-
-!Deposit class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 20:49:09'!
-register: aValue on: account from:aTransfer
-
-	| withdraw |
-	
-	withdraw := self for: aValue from:aTransfer .
 	account register: withdraw.
 		
 	^ withdraw! !
@@ -834,9 +813,8 @@ modifyBalance
 transfer
 	^transfer .! !
 
-!DepositTransfer methodsFor: 'value' stamp: 'sc 5/10/2018 21:27:16'!
+!DepositTransfer methodsFor: 'value' stamp: 'sc 5/16/2018 16:15:48'!
 value
-
 	^ value! !
 
 !DepositTransfer methodsFor: 'value' stamp: 'sc 5/11/2018 00:39:58'!
@@ -855,24 +833,9 @@ DepositTransfer class
 	instanceVariableNames: ''!
 
 !DepositTransfer class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 21:27:16'!
-for: aValue
-
-	^ self new initializeFor: aValue ! !
-
-!DepositTransfer class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 21:27:16'!
 for: aValue from:aTransfer
 
 	^ self new initializeFor: aValue from:aTransfer.! !
-
-!DepositTransfer class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 21:27:16'!
-register: aValue on: account
-
-	| withdraw |
-	
-	withdraw := self for: aValue.
-	account register: withdraw.
-		
-	^ withdraw! !
 
 !DepositTransfer class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 21:27:16'!
 register: aValue on: account from:aTransfer
@@ -935,27 +898,12 @@ for: aValue
 
 	^ self new initializeFor: aValue ! !
 
-!Withdraw class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 20:45:23'!
-for: aValue from:aTransfer
-
-	^ self new initializeFor: aValue from:aTransfer! !
-
 !Withdraw class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/14/2011 05:32'!
 register: aValue on: account
 
 	| withdraw |
 	
 	withdraw := self for: aValue.
-	account register: withdraw.
-		
-	^ withdraw! !
-
-!Withdraw class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 20:50:54'!
-register: aValue on: account from:aTransfer
-
-	| withdraw |
-	
-	withdraw := self for: aValue from:aTransfer .
 	account register: withdraw.
 		
 	^ withdraw! !
@@ -996,9 +944,8 @@ modifyBalance
 transfer
 	^transfer .! !
 
-!WithdrawTransfer methodsFor: 'value' stamp: 'sc 5/10/2018 21:27:36'!
+!WithdrawTransfer methodsFor: 'value' stamp: 'sc 5/16/2018 17:50:47'!
 value
-
 	^ value. ! !
 
 !WithdrawTransfer methodsFor: 'value' stamp: 'sc 5/11/2018 00:40:40'!
@@ -1017,24 +964,9 @@ WithdrawTransfer class
 	instanceVariableNames: ''!
 
 !WithdrawTransfer class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 21:27:36'!
-for: aValue
-
-	^ self new initializeFor: aValue ! !
-
-!WithdrawTransfer class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 21:27:36'!
 for: aValue from:aTransfer
 
 	^ self new initializeFor: aValue from:aTransfer! !
-
-!WithdrawTransfer class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 21:27:36'!
-register: aValue on: account
-
-	| withdraw |
-	
-	withdraw := self for: aValue.
-	account register: withdraw.
-		
-	^ withdraw! !
 
 !WithdrawTransfer class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 21:27:36'!
 register: aValue on: account from:aTransfer
@@ -1054,16 +986,14 @@ Object subclass: #AccountTransferNet
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!AccountTransferNet methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:07:33'!
+!AccountTransferNet methodsFor: 'evaluating' stamp: 'sc 5/16/2018 16:13:39'!
+value	
+	^ account transactions sum: [ :aTransaction | aTransaction valueTransfer ]! !
+
+
+!AccountTransferNet methodsFor: 'initialization' stamp: 'sc 5/16/2018 15:45:57'!
 initializeOf: anAccount 
 	account  := anAccount .! !
-
-!AccountTransferNet methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:08:49'!
-value
-	| saldo |
-	saldo := 0.	
-	account transactions do:[:aTransaction |  saldo := saldo + (aTransaction valueTransfer) ].
-	^saldo.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1071,7 +1001,7 @@ value
 AccountTransferNet class
 	instanceVariableNames: ''!
 
-!AccountTransferNet class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:06:31'!
+!AccountTransferNet class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 15:33:00'!
 for: anAccount
 	^self new initializeOf: anAccount .! !
 
@@ -1083,16 +1013,14 @@ Object subclass: #InvestmentEarnings
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!InvestmentEarnings methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:10:11'!
+!InvestmentEarnings methodsFor: 'initialization' stamp: 'sc 5/16/2018 15:51:14'!
 initializeOf: anAccount 
 	account  := anAccount .! !
 
-!InvestmentEarnings methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:10:50'!
+
+!InvestmentEarnings methodsFor: 'evaluating' stamp: 'sc 5/16/2018 16:19:51'!
 value
-	| saldo |
-	saldo := 0.	
-	account transactions do:[:aTransaction |  saldo := saldo + (aTransaction investmentEarnings) ].
-	^saldo.! !
+	^ account transactions sum: [ :aTransaction |aTransaction investmentEarnings ]! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1100,7 +1028,7 @@ value
 InvestmentEarnings class
 	instanceVariableNames: ''!
 
-!InvestmentEarnings class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:09:53'!
+!InvestmentEarnings class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 17:46:50'!
 for: anAccount
 	^self new initializeOf: anAccount .! !
 
@@ -1112,16 +1040,14 @@ Object subclass: #InvestmentNet
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!InvestmentNet methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:12:38'!
+!InvestmentNet methodsFor: 'initialization' stamp: 'sc 5/16/2018 15:54:44'!
 initializeOf: anAccount 
 	account  := anAccount .! !
 
-!InvestmentNet methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:13:06'!
-value
-	| saldo |
-	saldo := 0.	
-	account transactions do:[:aTransaction |  saldo := saldo + (aTransaction investment) ].
-	^saldo.! !
+
+!InvestmentNet methodsFor: 'evaluating' stamp: 'sc 5/16/2018 16:20:58'!
+value	
+	^ account transactions sum: [ :aTransaction |aTransaction investment ]! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1129,7 +1055,7 @@ value
 InvestmentNet class
 	instanceVariableNames: ''!
 
-!InvestmentNet class methodsFor: 'as yet unclassified' stamp: 'sc 5/14/2018 18:12:01'!
+!InvestmentNet class methodsFor: 'instance creation' stamp: 'sc 5/16/2018 17:47:37'!
 for: anAccount
 	^self new initializeOf: anAccount .! !
 
@@ -1192,9 +1118,8 @@ balance
 	^ accounts sum: [ :account | account balance ]
 ! !
 
-!Portfolio methodsFor: 'transactions' stamp: 'HAW 9/25/2017 19:40:20'!
+!Portfolio methodsFor: 'transactions' stamp: 'sc 5/16/2018 16:49:13'!
 transactions 
-
 	^ accounts 
 		inject: OrderedCollection new 
 		into: [ :transactions :account | transactions addAll: account transactions. transactions ]
@@ -1215,15 +1140,13 @@ initializeWithAll: aCollectionOfAccounts
 	accounts := aCollectionOfAccounts   ! !
 
 
-!Portfolio methodsFor: 'print' stamp: 'sc 5/15/2018 16:26:50'!
-treePrint: aDicctionary
-	|tree|
-	tree := OrderedCollection new.
-	accounts do:[:element | tree addAllLast: ((element treePrint: aDicctionary) collect:[:e | ' ',( e asString) ])].
-	
+!Portfolio methodsFor: 'print' stamp: 'sc 5/16/2018 17:34:57'!
+treePrint: aDicctionary	
+	|tree| 
+	tree := accounts inject: OrderedCollection new 	into: [ :prints :element | prints addAllLast: ((element treePrint: aDicctionary) collect:[:e | ' ',( e asString) ]). prints ].
 	tree addFirst: (aDicctionary at: self). 
 	^tree.
-	! !
+! !
 
 !Portfolio methodsFor: 'print' stamp: 'sc 5/15/2018 16:41:18'!
 treePrintReverse: aDicctionary
