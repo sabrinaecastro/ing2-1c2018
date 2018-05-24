@@ -121,6 +121,25 @@ test08PortfolioKnowsTransactionsRegisteredByItsManagedAccounts
 	self assert: (composedPortfolio registers: deposit2).
 	self assert: (composedPortfolio registers: deposit3).! !
 
+!PortfolioTest methodsFor: 'tests' stamp: 'HernanWilkinson 9/12/2011 13:25'!
+test08PortofolioKnowsTransactionsRegisteredByItsManagedAccounts 
+
+	| account1 account2 account3 complexPortfolio composedPortfolio deposit1 deposit2 deposit3 |
+	
+	account1 := ReceptiveAccount new.
+	account2 := ReceptiveAccount new.
+	account3 := ReceptiveAccount new.
+	complexPortfolio := Portfolio with: account1 with: account2.
+	composedPortfolio := Portfolio with: complexPortfolio with: account3.
+		
+	deposit1 := Deposit register: 100 on: account1.
+	deposit2 := Deposit register: 200 on: account2.
+	deposit3 := Deposit register: 300 on: account3.
+		
+ 	self assert: (composedPortfolio registers: deposit1).
+	self assert: (composedPortfolio registers: deposit2).
+	self assert: (composedPortfolio registers: deposit3).! !
+
 !PortfolioTest methodsFor: 'tests' stamp: 'HernanWilkinson 7/13/2011 19:00'!
 test10ReceptiveAccountManageItSelf 
 
@@ -590,72 +609,17 @@ initializeFor: aReceptiveAccount
 	account := aReceptiveAccount ! !
 
 
-!AccountSummaryWithAllInvestmentInformation methodsFor: 'evaluating' stamp: 'sc 5/21/2018 21:49:41'!
+!AccountSummaryWithAllInvestmentInformation methodsFor: 'evaluating' stamp: 'sc 5/24/2018 03:10:02'!
 lines
-
-	| lines investmentEarningsValue readySemaphore|
-	readySemaphore _ Semaphore new.
-	[ investmentEarningsValue := (InvestmentNetVisitor for: account) value. readySemaphore signal.] fork.
+	| lines investmentEarnings |
+	
+	investmentEarnings :=Paralleliser with: [(InvestmentNetVisitor for: account) value].
+	
 	lines := (AccountSummaryWithInvestmentEarnings for: account) lines.
-	readySemaphore wait.
-	lines add: 'Inversiones por ', investmentEarningsValue printString.
 	
-	 ^ lines! !
-
-!AccountSummaryWithAllInvestmentInformation methodsFor: 'evaluating' stamp: 'sc 5/21/2018 21:34:38'!
-lines2 
-
-	| lines investmentEarningsValue readySemaphore|
-	readySemaphore _ Semaphore new.
-	[ investmentEarningsValue := (InvestmentNetVisitor for: account) value. readySemaphore signal.] fork.
-	lines := (AccountSummaryWithInvestmentEarnings for: account) lines.
-	readySemaphore wait.
-	lines add: 'Inversiones por ', investmentEarningsValue printString.
+	lines add: 'Inversiones por ', investmentEarnings value printString.
 	
-	 ^ lines! !
-
-!AccountSummaryWithAllInvestmentInformation methodsFor: 'evaluating' stamp: 'sc 5/21/2018 21:49:36'!
-lines_fixme
-
-	| paralleliser lines investmentEarningsValue readySemaphore|
-
-	readySemaphore _ Semaphore new.
-	paralleliser _ (Paralleliser with: readySemaphore).
-	
-	investmentEarningsValue _ paralleliser runBlock: [ (InvestmentNetVisitor for: account) value] .
-
-	lines := (AccountSummaryWithInvestmentEarnings for: account) lines.
-
-	readySemaphore wait.
-	lines add: 'Inversiones por ', investmentEarningsValue printString.
-	
-	 ^ lines! !
-
-!AccountSummaryWithAllInvestmentInformation methodsFor: 'evaluating' stamp: 'sc 5/21/2018 21:29:08'!
-xxx
-
-	| lines investmentEarningsValue readySemaphore|
-
-	readySemaphore _ Semaphore new.
-	investmentEarningsValue _ (Paralleliser with: readySemaphore) runBlock: [(InvestmentNetVisitor for: account) value].
-
-	lines := (AccountSummaryWithInvestmentEarnings for: account) lines.
-	readySemaphore wait.
-	lines add: 'Inversiones por ', investmentEarningsValue printString.
-	
-	 ^ lines! !
-
-!AccountSummaryWithAllInvestmentInformation methodsFor: 'evaluating' stamp: 'sc 5/21/2018 20:53:37'!
-xxx:aBlock yyy: anObject zzz:aMessage
-
-	| lines aBlockValue readySemaphore|
-	readySemaphore _ Semaphore new.
-	[ 	aBlockValue := aBlock value. 
-		readySemaphore signal.] fork.
-	lines := anObject lines.
-	readySemaphore wait.
-	lines add: aMessage, aBlockValue printString.
-	! !
+	^ lines.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -682,46 +646,17 @@ initializeFor: aReceptiveAccount
 	account := aReceptiveAccount ! !
 
 
-!AccountSummaryWithInvestmentEarnings methodsFor: 'evaluating' stamp: 'sc 5/21/2018 20:38:07'!
+!AccountSummaryWithInvestmentEarnings methodsFor: 'evaluating' stamp: 'sc 5/24/2018 03:13:46'!
 lines 
 
-	| lines investmentEarningsValue readySemaphore |
-	readySemaphore := Semaphore new.
+	| lines investmentEarnings|
 	
-     [ investmentEarningsValue := (InvestmentEarningVisitor for: account)  value.
-	readySemaphore signal] fork.
-	
+     investmentEarnings := Paralleliser with:[(InvestmentEarningVisitor for: account)  value].
 	lines := (AccountSummary for: account) lines.
-	readySemaphore wait.
-	lines add: 'Ganancias por ', investmentEarningsValue printString.
+
+	lines add: 'Ganancias por ', investmentEarnings value printString.
 	
 	 ^ lines! !
-
-!AccountSummaryWithInvestmentEarnings methodsFor: 'evaluating' stamp: 'sc 5/21/2018 21:23:34'!
-xxx
-
-	| lines investmentEarningsValue readySemaphore |
-	readySemaphore := Semaphore new.
-	
-     [ investmentEarningsValue := (InvestmentEarningVisitor for: account)  value.
-	readySemaphore signal] fork.
-	
-	lines := (AccountSummary for: account) lines.
-	readySemaphore wait.
-	lines add: 'Ganancias por ', investmentEarningsValue printString.
-	
-	 ^ lines! !
-
-!AccountSummaryWithInvestmentEarnings methodsFor: 'evaluating' stamp: 'sc 5/21/2018 20:54:54'!
-xxx:aBlock yyy: anObject zzz:aMessage
-
-	| lines aBlockValue readySemaphore|
-	readySemaphore _ Semaphore new.
-	[ 	aBlockValue := aBlock value. 
-		readySemaphore signal.] fork.
-	lines := anObject lines.
-	readySemaphore wait.
-	lines add: aMessage, aBlockValue printString.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -741,6 +676,12 @@ Object subclass: #AccountTransaction
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTimeConsuming-Ejercicio'!
+
+!AccountTransaction methodsFor: 'evaluating' stamp: 'sc 5/10/2018 19:42:32'!
+modifyBalance
+	self subclassResponsibility .
+	! !
+
 
 !AccountTransaction methodsFor: 'balance' stamp: 'HAW 5/15/2018 07:22:52'!
 affectBalance: aBalance
@@ -784,6 +725,48 @@ AccountTransaction subclass: #CertificateOfDeposit
 	poolDictionaries: ''
 	category: 'PortfolioTimeConsuming-Ejercicio'!
 
+!CertificateOfDeposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/14/2011 05:16'!
+initializeFor: aValue during: aNumberOfDay at: aTNA on: anAccount
+
+	value := aValue.
+	numberOfDays := aNumberOfDay.
+	tna := aTNA.
+	account := anAccount ! !
+
+!CertificateOfDeposit methodsFor: 'initialization' stamp: 'sc 5/11/2018 00:32:40'!
+initializeWith:aValue during:aNumberOfDays at:aTNA on:anAccount
+	value := aValue .
+	numberOfDays :=aNumberOfDays.
+	tna := aTNA.
+	account  := anAccount .	! !
+
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 00:49:22'!
+investment
+	^value.! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:13:45'!
+investmentEarnings
+	^ value * ((tna/360)* numberOfDays ).! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:15:47'!
+modifyBalance
+	^(-1) * value.! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:23:52'!
+numberOfDay
+	^ numberOfDays.! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:31:27'!
+valueTransfer
+	^0.! !
+
+
+!CertificateOfDeposit methodsFor: 'description' stamp: 'sc 5/11/2018 01:30:22'!
+descriptionTransaction
+	^'Plazo fijo por ', (self value asString), ' durante ', self numberOfDay asString , ' dias a una tna de ', (self tna *100) asString , '%'.! !
+
+
 !CertificateOfDeposit methodsFor: 'accessing' stamp: 'HernanWilkinson 7/14/2011 06:23'!
 days
 	
@@ -803,15 +786,6 @@ tna
 value
 
 	^ value! !
-
-
-!CertificateOfDeposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/14/2011 05:16'!
-initializeFor: aValue during: aNumberOfDay at: aTNA on: anAccount
-
-	value := aValue.
-	numberOfDays := aNumberOfDay.
-	tna := aTNA.
-	account := anAccount ! !
 
 
 !CertificateOfDeposit methodsFor: 'visiting' stamp: 'HernanWilkinson 7/14/2011 06:52'!
@@ -848,16 +822,37 @@ AccountTransaction subclass: #Deposit
 	poolDictionaries: ''
 	category: 'PortfolioTimeConsuming-Ejercicio'!
 
+!Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
+initializeFor: aValue
+
+	value := aValue ! !
+
+
+!Deposit methodsFor: 'value' stamp: 'sc 5/11/2018 00:49:33'!
+investment
+	^0.! !
+
+!Deposit methodsFor: 'value' stamp: 'sc 5/11/2018 01:09:01'!
+investmentEarnings
+	^0.! !
+
+!Deposit methodsFor: 'value' stamp: 'sc 5/10/2018 19:41:06'!
+modifyBalance
+	^value.! !
+
 !Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
 value
 
 	^ value! !
 
+!Deposit methodsFor: 'value' stamp: 'sc 5/11/2018 00:39:31'!
+valueTransfer
+	^0.! !
 
-!Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
-initializeFor: aValue
 
-	value := aValue ! !
+!Deposit methodsFor: 'description' stamp: 'sc 5/10/2018 21:42:10'!
+descriptionTransaction
+	^'Deposito por ', self value asString.! !
 
 
 !Deposit methodsFor: 'balance' stamp: 'HernanWilkinson 9/6/2016 19:49'!
@@ -882,12 +877,27 @@ for: aValue
 
 	^ self new initializeFor: aValue ! !
 
+!Deposit class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 20:49:31'!
+for: aValue from:aTransfer
+
+	^ self new initializeFor: aValue from:aTransfer.! !
+
 !Deposit class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 19:41'!
 register: aValue on: account
 
 	| withdraw |
 	
 	withdraw := self for: aValue.
+	account register: withdraw.
+		
+	^ withdraw! !
+
+!Deposit class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 20:49:09'!
+register: aValue on: account from:aTransfer
+
+	| withdraw |
+	
+	withdraw := self for: aValue from:aTransfer .
 	account register: withdraw.
 		
 	^ withdraw! !
@@ -996,22 +1006,43 @@ AccountTransaction subclass: #Withdraw
 	poolDictionaries: ''
 	category: 'PortfolioTimeConsuming-Ejercicio'!
 
+!Withdraw methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:46'!
+initializeFor: aValue
+
+	value := aValue ! !
+
+
+!Withdraw methodsFor: 'value' stamp: 'sc 5/11/2018 00:49:54'!
+investment
+	^0.! !
+
+!Withdraw methodsFor: 'value' stamp: 'sc 5/11/2018 01:09:30'!
+investmentEarnings
+	^0.! !
+
+!Withdraw methodsFor: 'value' stamp: 'sc 5/10/2018 19:40:29'!
+modifyBalance
+	^(-1) * value.! !
+
 !Withdraw methodsFor: 'value' stamp: 'HernanWilkinson 7/14/2011 05:54'!
 value
 
 	^ value ! !
+
+!Withdraw methodsFor: 'value' stamp: 'sc 5/11/2018 00:40:16'!
+valueTransfer
+	^0.! !
+
+
+!Withdraw methodsFor: 'description' stamp: 'sc 5/10/2018 21:47:30'!
+descriptionTransaction
+	^'Extraccion por ', self value asString.! !
 
 
 !Withdraw methodsFor: 'balance' stamp: 'HernanWilkinson 9/6/2016 19:50'!
 affectBalance: aBalance
 
 	^aBalance - value! !
-
-
-!Withdraw methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:46'!
-initializeFor: aValue
-
-	value := aValue ! !
 
 
 !Withdraw methodsFor: 'visiting' stamp: 'HernanWilkinson 7/14/2011 06:55'!
@@ -1030,12 +1061,27 @@ for: aValue
 
 	^ self new initializeFor: aValue ! !
 
+!Withdraw class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 20:45:23'!
+for: aValue from:aTransfer
+
+	^ self new initializeFor: aValue from:aTransfer! !
+
 !Withdraw class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/14/2011 05:32'!
 register: aValue on: account
 
 	| withdraw |
 	
 	withdraw := self for: aValue.
+	account register: withdraw.
+		
+	^ withdraw! !
+
+!Withdraw class methodsFor: 'instance creation' stamp: 'sc 5/10/2018 20:50:54'!
+register: aValue on: account from:aTransfer
+
+	| withdraw |
+	
+	withdraw := self for: aValue from:aTransfer .
 	account register: withdraw.
 		
 	^ withdraw! !
@@ -1092,12 +1138,22 @@ lines
 	
 	^ lines! !
 
+!AccountSummary methodsFor: 'evaluating' stamp: 'sc 5/16/2018 17:04:12'!
+value		
+		^ account transactions 
+		inject: OrderedCollection new 
+		into: [ :descriptions :aTransaction | descriptions add: aTransaction descriptionTransaction. descriptions ]! !
+
 
 !AccountSummary methodsFor: 'initialization' stamp: 'HernanWilkinson 7/14/2011 05:41'!
 initializeFor: aReceptiveAccount 
 	
 	account := aReceptiveAccount 
 	! !
+
+!AccountSummary methodsFor: 'initialization' stamp: 'sc 5/16/2018 15:42:58'!
+initializeOf: anAccount 
+	account  := anAccount .! !
 
 
 !AccountSummary methodsFor: 'visiting' stamp: 'HAW 8/13/2017 17:57:33'!
@@ -1373,22 +1429,22 @@ for: aReceptiveAccount
 
 !classDefinition: #Paralleliser category: #'PortfolioTimeConsuming-Ejercicio'!
 Object subclass: #Paralleliser
-	instanceVariableNames: 'semaphore'
+	instanceVariableNames: 'semaphore value'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTimeConsuming-Ejercicio'!
 
-!Paralleliser methodsFor: 'initializing' stamp: 'sc 5/21/2018 21:21:04'!
-initializeWith: aSemaphore
-	semaphore _ aSemaphore ! !
+!Paralleliser methodsFor: 'initializing' stamp: 'sc 5/24/2018 03:16:38'!
+initializeWith: aBlock
+	semaphore := Semaphore new.
+	[	value := aBlock value. 
+		semaphore signal.] fork.! !
 
 
-!Paralleliser methodsFor: 'run' stamp: 'sc 5/21/2018 21:32:09'!
-runBlock: aBlock
-	| result |
-	[result _ aBlock value] fork.
-	semaphore signal.
-	^result.! !
+!Paralleliser methodsFor: 'evaluating' stamp: 'sc 5/24/2018 03:15:17'!
+value
+	semaphore wait.
+	^value.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1396,9 +1452,9 @@ runBlock: aBlock
 Paralleliser class
 	instanceVariableNames: ''!
 
-!Paralleliser class methodsFor: 'as yet unclassified' stamp: 'sc 5/21/2018 21:37:45'!
-with: aSemaphore
-	^Paralleliser new initializeWith: aSemaphore.! !
+!Paralleliser class methodsFor: 'as yet unclassified' stamp: 'sc 5/24/2018 03:00:51'!
+with: aBlock
+	^Paralleliser new initializeWith: aBlock.! !
 
 
 !classDefinition: #ReversePortfolioTreePrinter category: #'PortfolioTimeConsuming-Ejercicio'!
@@ -1491,12 +1547,6 @@ registers: aTransaction
 	^ accounts anySatisfy: [ :anAccount | anAccount registers: aTransaction ]  ! !
 
 
-!Portfolio methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 19:19'!
-initializeWithAll: aCollectionOfAccounts
-
-	accounts := aCollectionOfAccounts   ! !
-
-
 !Portfolio methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 19:20'!
 balance
 
@@ -1518,6 +1568,25 @@ transactionsOf: anAccount
 	! !
 
 
+!Portfolio methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 19:19'!
+initializeWithAll: aCollectionOfAccounts
+
+	accounts := aCollectionOfAccounts   ! !
+
+
+!Portfolio methodsFor: 'print' stamp: 'sc 5/16/2018 17:34:57'!
+treePrint: aDicctionary	
+	|tree| 
+	tree := accounts inject: OrderedCollection new 	into: [ :prints :element | prints addAllLast: ((element treePrint: aDicctionary) collect:[:e | ' ',( e asString) ]). prints ].
+	tree addFirst: (aDicctionary at: self). 
+	^tree.
+! !
+
+!Portfolio methodsFor: 'print' stamp: 'sc 5/15/2018 16:41:18'!
+treePrintReverse: aDicctionary
+	^(self treePrint:aDicctionary) reverse.! !
+
+
 !Portfolio methodsFor: 'visiting' stamp: 'HernanWilkinson 7/14/2011 06:35'!
 accept: aSummarizingAccountVisitor
 
@@ -1533,6 +1602,19 @@ visitAccountsWith: aPortfolioTreePrinter
 !classDefinition: 'Portfolio class' category: #'PortfolioTimeConsuming-Ejercicio'!
 Portfolio class
 	instanceVariableNames: ''!
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/8/2018 16:48:08'!
+with: leftAccount with: rightAccount
+
+	^ self withAll: (Array with: leftAccount with: rightAccount)! !
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/8/2018 16:48:32'!
+withAll: aCollectionOfAccounts
+
+	self checkCreationPreconditions: aCollectionOfAccounts.
+	
+	^self new initializeWithAll: aCollectionOfAccounts ! !
+
 
 !Portfolio class methodsFor: 'assertions' stamp: 'HernanWilkinson 9/18/2011 17:22'!
 check: sourceAccount doesNotManagaAnyOf: aCollectionOfAccounts
@@ -1569,19 +1651,6 @@ accountNotManagedMessageDescription
 	
 	^ 'Account not managed'! !
 
-
-!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/8/2018 16:48:08'!
-with: leftAccount with: rightAccount
-
-	^ self withAll: (Array with: leftAccount with: rightAccount)! !
-
-!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/8/2018 16:48:32'!
-withAll: aCollectionOfAccounts
-
-	self checkCreationPreconditions: aCollectionOfAccounts.
-	
-	^self new initializeWithAll: aCollectionOfAccounts ! !
-
 
 !classDefinition: #ReceptiveAccount category: #'PortfolioTimeConsuming-Ejercicio'!
 SummarizingAccount subclass: #ReceptiveAccount
@@ -1595,19 +1664,6 @@ initialize
 
 	super initialize.
 	transactions := OrderedCollection new.! !
-
-
-!ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-manages: anAccount
-
-	^ self = anAccount 
-! !
-
-!ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-registers: aTtransaction
-
-	^ transactions includes: aTtransaction 
-! !
 
 
 !ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/14/2011 05:57'!
@@ -1626,6 +1682,56 @@ register: aTransaction
 transactions 
 
 	^ transactions copy! !
+
+
+!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:18:28'!
+accountSummary
+	|summary|
+	summary := OrderedCollection new.
+   	transactions do:[:aTransaction | summary add: (aTransaction descriptionTransaction) ].
+	^ summary.! !
+
+!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:41:44'!
+accountTransferNet
+	| saldo |
+	saldo := 0.	
+	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction valueTransfer) ].
+	^saldo.! !
+
+!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 01:08:44'!
+investmentEarnings
+	| saldo |
+	saldo := 0.	
+	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction investmentEarnings) ].
+	^saldo.! !
+
+!ReceptiveAccount methodsFor: 'queries' stamp: 'sc 5/11/2018 00:50:33'!
+investmentNet
+	| saldo |
+	saldo := 0.	
+	 transactions do:[:aTransaction |  saldo := saldo + (aTransaction investment) ].
+	^saldo.! !
+
+
+!ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+manages: anAccount
+
+	^ self = anAccount 
+! !
+
+!ReceptiveAccount methodsFor: 'testing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+registers: aTtransaction
+
+	^ transactions includes: aTtransaction 
+! !
+
+
+!ReceptiveAccount methodsFor: 'print' stamp: 'sc 5/15/2018 15:53:06'!
+treePrint: aDicctionary
+	|tree|
+	tree := OrderedCollection new.
+	tree add: (aDicctionary at: self).
+	^tree.! !
 
 
 !ReceptiveAccount methodsFor: 'visiting' stamp: 'HernanWilkinson 7/14/2011 06:36'!
@@ -1727,6 +1833,20 @@ Object subclass: #Transfer
 	poolDictionaries: ''
 	category: 'PortfolioTimeConsuming-Ejercicio'!
 
+!Transfer methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 19:43'!
+initializeFor: aValue from: aSourceAccount to: aTargetAccount
+
+	value := aValue.
+	sourceAccount := aSourceAccount.
+	targetAccount := aTargetAccount! !
+
+!Transfer methodsFor: 'initialization' stamp: 'sc 5/10/2018 21:27:57'!
+initializeWith: aValue from: fromAccount to: toAccount
+	withdraw := WithdrawTransfer register: aValue on: fromAccount from:self .
+	deposit  := DepositTransfer  register:  aValue on: toAccount from:self.
+	value  := aValue.! !
+
+
 !Transfer methodsFor: 'value' stamp: 'HernanWilkinson 7/14/2011 05:55'!
 value
 
@@ -1742,14 +1862,6 @@ depositLeg
 withdrawLeg
 	
 	^ TransferWithdraw of: self ! !
-
-
-!Transfer methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 19:43'!
-initializeFor: aValue from: aSourceAccount to: aTargetAccount
-
-	value := aValue.
-	sourceAccount := aSourceAccount.
-	targetAccount := aTargetAccount! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
