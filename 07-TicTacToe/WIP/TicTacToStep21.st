@@ -412,87 +412,58 @@ Object subclass: #TicTacToe
 	poolDictionaries: ''
 	category: 'TicTacToStep21'!
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 12:21:33'!
-OHasWon
-	
-	^winner = #o! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 10:01:34'!
+!TicTacToe methodsFor: 'values' stamp: 'sc 5/30/2018 18:29:16'!
 Os
-
 	^os copy.! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 12:21:43'!
-XHasWon
-	
-	^winner = #x! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 10:01:25'!
+!TicTacToe methodsFor: 'values' stamp: 'sc 5/30/2018 18:28:30'!
 Xs
-
 	^xs copy.! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 12:51:23'!
+
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:34:55'!
+OHasWon
+	^winner = #o.! !
+
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:34:59'!
+XHasWon
+	^winner = #x.! !
+
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:37:29'!
 hasCompletedColumn: positions
-	
-	^ (1 to: 3) anySatisfy: [ :y | (positions count: [ :position | position y = y ]) = 3 ]! !
+	^ (1 to: 3) anySatisfy: [ :y | (positions count: [ :position | position y = y ]) = 3 ].! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 12:36:01'!
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:43:30'!
 hasCompletedRow: positions
+	^ (1 to: 3) anySatisfy: [ :x | (positions count: [ :posicion | posicion x = x ]) = 3 ].! !
 
-	^ (1 to: 3) anySatisfy: [ :x | (positions count: [ :posicion | posicion x = x ]) = 3 ]! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 12:56:21'!
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:38:43'!
 hasDownDiagonal: positions
+	^(1 to: 3) allSatisfy: [ :n | positions includes: n@n ].! !
 
-	^(1 to: 3) allSatisfy: [ :n | positions includes: n@n ]
-! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 13:02:13'!
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:38:57'!
 hasUpDiagonal: positions
+	^(1 to: 3) allSatisfy: [ :n | positions includes: n@(4-n) ].! !
 
-	^(1 to: 3) allSatisfy: [ :n | positions includes: n@(4-n) ]! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 13:01:53'!
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:36:51'!
 hasWin: positions
-
 	^(self hasCompletedRow: positions)
 		or: [(self hasCompletedColumn: positions) 
 				or: [(self hasDownDiagonal: positions)
-					or: [(self hasUpDiagonal: positions)]]]
+					or: [(self hasUpDiagonal: positions)]]].! !
 
-
-! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'MG 5/28/2018 21:02:42'!
-initialize
-	"initialize board"	
-	status _ TurnX new! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 13:17:25'!
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:35:24'!
 isGameOver
-	
-	^winner = #x or: [ winner = #o ]! !
+	^winner = #x or: [ winner = #o ].! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 15:07:08'!
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:35:29'!
 isOver
-	
-	^self XHasWon or: [ self OHasWon or: [ self isTied ]]
-! !
+	^self XHasWon or: [ self OHasWon or: [ self isTied ]].! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 15:06:57'!
+!TicTacToe methodsFor: 'querys' stamp: 'sc 5/30/2018 18:35:33'!
 isTied
-	
-	^xs size = 5 and: [ os size = 4 and: [ self XHasWon not ]] " and: [ self YHasWon not ]]]"! !
+	^xs size = 5 and: [ os size = 4 and: [ self XHasWon not ]] ." and: [ self YHasWon not ]]]"! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'MG 5/28/2018 20:22:59'!
-markWithOAt:aPosition
-	^turn markWithOAt: aPosition inGame: self.! !
-
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'MG 5/28/2018 21:17:58'!
-markWithOWhenTurnIsForOAt: aPosition
-	"do someting with aPosition"
-	turn := TurnO new ! !
 
 !TicTacToe methodsFor: 'as yet unclassified' stamp: 'MG 5/28/2018 20:21:00'!
 markWithOWhenTurnIsForOIn: aPosition
@@ -516,29 +487,44 @@ markWithXWhenTurnIsForXIn: aPosition
 	"do someting with aPosition"
 	turn := TurnToOToPlay ! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 13:16:00'!
-putOAt: aPosition
 
+!TicTacToe methodsFor: 'initialization' stamp: 'sc 5/30/2018 18:20:24'!
+initialize
+	os:= Set new.
+	xs:= Set new.
+	turn:=#x.
+	status:= TicTacToeStatus new.! !
+
+
+!TicTacToe methodsFor: 'update' stamp: 'sc 5/30/2018 18:40:13'!
+markWithOAt:aPosition
+	^turn markWithOAt: aPosition inGame: self.! !
+
+!TicTacToe methodsFor: 'update' stamp: 'sc 5/30/2018 18:40:27'!
+markWithOWhenTurnIsForOAt: aPosition
+	"do someting with aPosition"
+	turn := TurnO new.! !
+
+
+!TicTacToe methodsFor: 'play' stamp: 'sc 5/30/2018 18:42:48'!
+putOAt: aPosition
 	self isGameOver ifTrue: [ self error: self class canNotPlayWhenGameIsOverErrorMessage ].
 	turn = #o ifFalse: [ self error: self class notXTurnErrorMessage ].
 	(xs includes: aPosition) ifTrue: [ self error: self class positionTakenErrorMessage ].
 	(os includes: aPosition) ifTrue: [ self error: self class positionTakenErrorMessage ].
 	os add: aPosition.
 	(self hasWin: os) ifTrue: [ ^winner := #o ].
-	turn := #x
-! !
+	turn := #x.! !
 
-!TicTacToe methodsFor: 'as yet unclassified' stamp: 'jg 5/22/2018 13:23:15'!
+!TicTacToe methodsFor: 'play' stamp: 'sc 5/30/2018 18:42:41'!
 putXAt: aPosition
-
 	self isGameOver ifTrue: [ self error: self class canNotPlayWhenGameIsOverErrorMessage ].
 	turn = #x ifFalse: [ self error: self class notXTurnErrorMessage ].
 	(xs includes: aPosition) ifTrue: [ self error: self class positionTakenErrorMessage ].
 	(os includes: aPosition) ifTrue: [ self error: self class positionTakenErrorMessage ].
 	xs add: aPosition.
 	(self hasWin: xs) ifTrue: [ ^winner := #x ].
-	turn := #o
-! !
+	turn := #o.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
