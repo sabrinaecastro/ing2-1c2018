@@ -475,6 +475,64 @@ test04
 	self assert: (console log at:10) = 'Estado: Juego terminado - Ganó X!!'.
 ! !
 
+!TicTacToeTestConsole methodsFor: 'testing' stamp: 'sc 6/2/2018 20:10:02'!
+test05
+	|console game|
+	game _ TicTacToe new.
+	console := TicTacToeConsole with:game.
+	game markWithXAt: 1@2.
+	game markWithOAt: 2@2.
+	game markWithXAt: 1@3.
+	game markWithOAt: 1@1.
+	game markWithXAt: 2@3.
+	game markWithOAt: 3@3.
+	self assert: (console log at:1) = 'X marcó en 1@2'.
+	self assert: (console log at:2) = 'Estado: Jugando O'.
+	self assert: (console log at:3) = 'O marcó en 2@2'.
+	self assert: (console log at:4) = 'Estado: Jugando X'.
+	self assert: (console log at:5) = 'X marcó en 1@3'.
+	self assert: (console log at:6) = 'Estado: Jugando O'.
+	self assert: (console log at:7) = 'O marcó en 1@1'.
+	self assert: (console log at:8) = 'Estado: Jugando X'.
+	self assert: (console log at:9) = 'X marcó en 2@3'.
+	self assert: (console log at:10) = 'Estado: Jugando O'.
+	self assert: (console log at:11) = 'O marcó en 3@3'.
+	self assert: (console log at:12) = 'Estado: Juego terminado - Ganó O!!'.
+! !
+
+!TicTacToeTestConsole methodsFor: 'testing' stamp: 'sc 6/2/2018 20:33:34'!
+test06
+	|console game|
+	game _ TicTacToe new.
+	console := TicTacToeConsole with:game.
+	game markWithXAt: 1@2.
+	game markWithOAt: 2@2.
+	game markWithXAt: 1@3.
+	game markWithOAt: 1@1.
+	game markWithXAt: 3@3.
+	game markWithOAt: 2@3.
+	game markWithXAt: 2@1.
+	game markWithOAt: 3@1.
+	game markWithXAt: 3@2.
+	self assert: (console log at:1) = 'X marcó en 1@2'.
+	self assert: (console log at:2) = 'Estado: Jugando O'.
+	self assert: (console log at:3) = 'O marcó en 2@2'.
+	self assert: (console log at:4) = 'Estado: Jugando X'.
+	self assert: (console log at:5) = 'X marcó en 1@3'.
+	self assert: (console log at:6) = 'Estado: Jugando O'.
+	self assert: (console log at:7) = 'O marcó en 1@1'.
+	self assert: (console log at:8) = 'Estado: Jugando X'.
+	self assert: (console log at:9) = 'X marcó en 3@3'.
+	self assert: (console log at:10) = 'Estado: Jugando O'.
+	self assert: (console log at:11) = 'O marcó en 2@3'.
+	self assert: (console log at:12) = 'Estado: Jugando X'.
+	self assert: (console log at:13) = 'X marcó en 2@1'.
+	self assert: (console log at:14) = 'Estado: Jugando O'.
+	self assert: (console log at:15) = 'O marcó en 3@1'.
+	self assert: (console log at:16) = 'Estado: Jugando X'.
+	self assert: (console log at:17) = 'X marcó en 3@2'.
+	self assert: (console log at:18) = 'Estado: Juego terminado - Empate'! !
+
 
 !classDefinition: #TicTacToe category: #TicTacToe!
 Object subclass: #TicTacToe
@@ -623,60 +681,57 @@ playerXPositions
 	^ playerXPositions copy.! !
 
 
-!TicTacToe methodsFor: 'console' stamp: 'HAW 10/26/2017 12:22:42'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 19:59:16'!
 has: positions threeOf: aPositionComponent
 
-	^(positions collect: aPositionComponent) asBag contents values includes: 3 
-	! !
+	^(positions collect: aPositionComponent) asBag contents values includes: 3.! !
 
-!TicTacToe methodsFor: 'console' stamp: 'HAW 10/25/2017 16:09:34'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 19:59:27'!
 hasCompletedColumn: positions
 	
-	^self has: positions threeOf: [ :aPosition | aPosition x ]
-	
-	! !
+	^self has: positions threeOf: [ :aPosition | aPosition x ]! !
 
-!TicTacToe methodsFor: 'console' stamp: 'HAW 10/26/2017 12:25:55'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 19:59:40'!
 hasCompletedDiagonal: positions 
 	
 	^(self hasUpDiagonal: positions) or: [self hasDownDiagonal: positions]! !
 
-!TicTacToe methodsFor: 'console' stamp: 'HAW 10/25/2017 16:10:47'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 19:59:50'!
 hasCompletedLine: positions
 	
-	^self has: positions threeOf: [ :aPosition | aPosition y ]
-! !
+	^self has: positions threeOf: [ :aPosition | aPosition y ]! !
 
-!TicTacToe methodsFor: 'console' stamp: 'HAW 5/31/2018 00:25:48'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 20:00:00'!
 hasCompletedStraightLine: positions
 	
 	^(self hasCompletedColumn: positions) or: [self hasCompletedLine: positions ]! !
 
-!TicTacToe methodsFor: 'console' stamp: 'HAW 10/24/2017 17:12:48'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 20:00:13'!
 hasDownDiagonal: positions
 
 	^(1 to: 3) allSatisfy: [ :n | positions includes: n@(4-n) ]! !
 
-!TicTacToe methodsFor: 'console' stamp: 'HAW 10/24/2017 17:12:48'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 20:00:23'!
 hasUpDiagonal: positions
 	
 	^(1 to: 3) allSatisfy: [ :n | positions includes: n@n ]! !
 
-!TicTacToe methodsFor: 'console' stamp: 'HAW 10/26/2017 12:26:17'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 20:00:35'!
 hasWin: positions
 
 	^positions size >= 3 and: [ (self hasCompletedStraightLine: positions) or: [ self hasCompletedDiagonal: positions ]].
 		
 	! !
 
-!TicTacToe methodsFor: 'console' stamp: 'MG 6/2/2018 00:41:25'!
-registerObserver: anObserver
-	observers add: anObserver.! !
-
-!TicTacToe methodsFor: 'console' stamp: 'HAW 10/26/2017 12:44:42'!
+!TicTacToe methodsFor: 'game over testing - private' stamp: 'sc 6/2/2018 20:01:10'!
 shouldBeTiedWhenNoOneWon
 
 	^ playerXPositions size = 5 and: [ playerOPositions size = 4 ].! !
+
+
+!TicTacToe methodsFor: 'observers' stamp: 'MG 6/2/2018 00:41:25'!
+registerObserver: anObserver
+	observers add: anObserver.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
