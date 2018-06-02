@@ -478,16 +478,17 @@ test04
 
 !classDefinition: #TicTacToe category: #TicTacToe!
 Object subclass: #TicTacToe
-	instanceVariableNames: 'state playerOPositions playerXPositions console'
+	instanceVariableNames: 'state playerOPositions playerXPositions observers'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToe methodsFor: 'initialization' stamp: 'HAW 10/25/2017 16:08:04'!
+!TicTacToe methodsFor: 'initialization' stamp: 'MG 6/2/2018 01:58:52'!
 initialize
 	playerXPositions _ OrderedCollection new.
 	playerOPositions _ OrderedCollection new.
-	state _ PlayingX for: self.! !
+	state _ PlayingX for: self.
+	observers _ Set new.! !
 
 
 !TicTacToe methodsFor: 'marking board' stamp: 'HAW 5/31/2018 18:49:39'!
@@ -533,17 +534,16 @@ assertIsInBoardBounds: aPosition
 
 	(aPosition between: 1@1 and: 3@3) ifFalse: [ self error: self class positionOutsideBoardErrorMessage ]! !
 
-!TicTacToe methodsFor: 'marking board - private' stamp: 'sc 5/31/2018 20:43:56'!
+!TicTacToe methodsFor: 'marking board - private' stamp: 'MG 6/2/2018 01:51:59'!
 markWithOWhenPlayingOAt: aPosition
 	self assertIsFree: aPosition.
-	console markWithO: aPosition.
+	observers collect: [ :anObserver |
+		anObserver markWithOAt: aPosition ].
 	self
 		add: aPosition
 		to: playerOPositions
 		nextPlayerState: PlayingX
-		winnerState: PlayerOWon.
-		
-		! !
+		winnerState: PlayerOWon.! !
 
 !TicTacToe methodsFor: 'marking board - private' stamp: 'HAW 10/26/2017 12:30:01'!
 markWithOWhenPlayingXAt: aPosition
@@ -553,23 +553,29 @@ markWithOWhenPlayingXAt: aPosition
 markWithXWhenPlayingOAt: aPoint
 	self error: self class notXTurnErrorMessage.! !
 
-!TicTacToe methodsFor: 'marking board - private' stamp: 'sc 5/31/2018 20:38:28'!
+!TicTacToe methodsFor: 'marking board - private' stamp: 'MG 6/2/2018 01:52:18'!
 markWithXWhenPlayingXAt: aPosition
 	self assertIsFree: aPosition.
-	console markWithX: aPosition.
+	observers collect: [ :anObserver |
+		anObserver markWithXAt: aPosition ].
 	self
 		add: aPosition
 		to: playerXPositions
 		nextPlayerState: PlayingO
-		winnerState: PlayerXWon.
-		! !
+		winnerState: PlayerXWon.! !
 
-!TicTacToe methodsFor: 'marking board - private' stamp: 'sc 5/31/2018 20:55:13'!
+!TicTacToe methodsFor: 'marking board - private' stamp: 'MG 6/2/2018 01:18:51'!
 stateAfterAddingTo: positions with: nextPlayingState and: winnerState
 
-	(self hasWin: positions) ifTrue: [ console markWinner: winnerState. ^ winnerState ].
-	self shouldBeTiedWhenNoOneWon ifTrue: [ console markTied. ^ GameTied ].
-	console markNextPlaying: nextPlayingState.
+	(self hasWin: positions) ifTrue: [ 
+		observers collect: [:anObserver | anObserver markWinner: winnerState]. ^ winnerState 
+		].
+	self shouldBeTiedWhenNoOneWon ifTrue: [
+		observers collect: [:anObserver | anObserver markTied]. ^ GameTied 
+		].
+	observers collect:[
+		:anObserver | anObserver markNextPlaying: nextPlayingState
+		].
 	^ nextPlayingState.! !
 
 
@@ -663,9 +669,9 @@ hasWin: positions
 		
 	! !
 
-!TicTacToe methodsFor: 'console' stamp: 'sc 5/31/2018 19:38:14'!
-observer: aConsole
-	console:= aConsole.! !
+!TicTacToe methodsFor: 'console' stamp: 'MG 6/2/2018 00:41:25'!
+registerObserver: anObserver
+	observers add: anObserver.! !
 
 !TicTacToe methodsFor: 'console' stamp: 'HAW 10/26/2017 12:44:42'!
 shouldBeTiedWhenNoOneWon
@@ -704,18 +710,45 @@ positionTakenErrorMessage
 	^'Position taken'! !
 
 
-!classDefinition: #TicTacToeConsole category: #TicTacToe!
-Object subclass: #TicTacToeConsole
-	instanceVariableNames: 'game log'
+!classDefinition: #TicTacToeObserver category: #TicTacToe!
+Object subclass: #TicTacToeObserver
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeConsole methodsFor: 'initialize' stamp: 'sc 5/31/2018 19:39:04'!
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:38:33'!
+initializeWith: aGame! !
+
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:35:57'!
+markNextPlaying: aPlaying! !
+
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:36:23'!
+markTied! !
+
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:36:44'!
+markWinner: winnerState! !
+
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:51:59'!
+markWithOAt: aPosition
+	^ self.! !
+
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:52:18'!
+markWithXAt: aPosition
+	^ self.! !
+
+
+!classDefinition: #TicTacToeConsole category: #TicTacToe!
+TicTacToeObserver subclass: #TicTacToeConsole
+	instanceVariableNames: 'log'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TicTacToe'!
+
+!TicTacToeConsole methodsFor: 'initialize' stamp: 'MG 6/2/2018 01:34:22'!
 initializeWith: aGame 
-	game  := aGame.
 	log := OrderedCollection new.
-	game observer: self.! !
+	aGame registerObserver: self.! !
 
 
 !TicTacToeConsole methodsFor: 'value' stamp: 'sc 5/31/2018 19:50:07'!
@@ -737,13 +770,13 @@ markWinner: winnerState
 	log addLast: 'Estado: Juego terminado - Ganó ', (winnerState playing asString), '!!'.
 	! !
 
-!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'sc 5/31/2018 20:38:44'!
-markWithO: aPosition
-	log addLast: ('O marcó en ', aPosition asString).! !
+!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:51:59'!
+markWithOAt: aPosition
+	log addLast: 'O marcó en ' , aPosition asString.! !
 
-!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'sc 5/31/2018 20:38:37'!
-markWithX: aPosition
-	log addLast: ('X marcó en ', aPosition asString).! !
+!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:52:18'!
+markWithXAt: aPosition
+	log addLast: 'X marcó en ' , aPosition asString.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -755,6 +788,33 @@ TicTacToeConsole class
 with: aGame
 	^self new initializeWith:aGame.
 ! !
+
+
+!classDefinition: #TicTacToeView category: #TicTacToe!
+TicTacToeObserver subclass: #TicTacToeView
+	instanceVariableNames: 'board'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TicTacToe'!
+
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:46:58'!
+board
+	^board.! !
+
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:48:59'!
+initializeWith: aGame
+	board _  (String with: Character lf),
+		' | | ', (String with: Character lf),
+		'-----', (String with: Character lf),
+		' | | ', (String with: Character lf),
+		'-----', (String with: Character lf),
+		' | | ', (String with: Character lf).! !
+
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:50:31'!
+markWithOAt: aPosition! !
+
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:50:26'!
+markWithXAt: aPosition! !
 
 
 !classDefinition: #TicTacToeState category: #TicTacToe!
@@ -1051,7 +1111,6 @@ markWithOAt: aPosition
 !PlayingX methodsFor: 'marking board' stamp: 'HAW 10/26/2017 12:30:46'!
 markWithXAt: aPosition
 	game markWithXWhenPlayingXAt: aPosition.! !
-
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
