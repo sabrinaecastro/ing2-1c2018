@@ -797,24 +797,49 @@ TicTacToeObserver subclass: #TicTacToeView
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:46:58'!
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 13:24:03'!
 board
-	^board.! !
+	|stringAcc lastRow|
+	stringAcc _ ''.
+	(1 to: 2) do: [ :row|
+		(1 to: 3) do: [ :column |
+			stringAcc := stringAcc, (board at:(((row -1)* 3) + column)).
+			stringAcc := stringAcc, '|'
+		]. 
+	     stringAcc := stringAcc, (String with: Character lf).
+		stringAcc := stringAcc, '-----'.
+		stringAcc := stringAcc, (String with: Character lf).		
+	].
+	lastRow _ 3.
+	(1 to: 3) do: [ :column |
+		stringAcc := stringAcc, (board at:(((lastRow -1)* 3) + column)).
+		stringAcc := stringAcc, '|'
+	]. 
+	stringAcc := stringAcc, (String with: Character lf).
+	^stringAcc.! !
 
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:48:59'!
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 11:27:05'!
 initializeWith: aGame
-	board _  (String with: Character lf),
+	aGame registerObserver: self.
+	board _  #(' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ').
+		"(String with: Character lf),
 		' | | ', (String with: Character lf),
 		'-----', (String with: Character lf),
 		' | | ', (String with: Character lf),
 		'-----', (String with: Character lf),
-		' | | ', (String with: Character lf).! !
+		' | | ', (String with: Character lf)."! !
 
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:50:31'!
-markWithOAt: aPosition! !
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 11:49:51'!
+markWithOAt: aPosition
+	board at: 
+		((((aPosition x) -1) * 3) + (aPosition y))
+		put: 'O'.! !
 
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:50:26'!
-markWithXAt: aPosition! !
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 11:50:04'!
+markWithXAt: aPosition
+	board at: 
+		((((aPosition x) -1) * 3) + (aPosition y))
+		put: 'X'.! !
 
 
 !classDefinition: #TicTacToeState category: #TicTacToe!
