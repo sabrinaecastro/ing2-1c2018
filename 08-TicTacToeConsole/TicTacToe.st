@@ -416,8 +416,8 @@ TestCase subclass: #TicTacToeTestObserver
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 20:55:33'!
-test01
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:23:33'!
+test01ConsolePlayXNextO
 	|console game stringAcc|
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
@@ -429,8 +429,8 @@ test01
 
 	self assert: (console board = stringAcc).! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:02:13'!
-test02
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:24:01'!
+test02ConsoleTwoPlays
 	|console game stringAcc|
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
@@ -446,8 +446,8 @@ test02
 	stringAcc := stringAcc, 'Estado: Jugando X'.
 	self assert: (console board = stringAcc).! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:04:10'!
-test03
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:24:34'!
+test03ConsoleThreePlays
 	|console game stringAcc|
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
@@ -468,8 +468,8 @@ test03
 	stringAcc := stringAcc, 'Estado: Jugando O'.
 	self assert: (console board =stringAcc ).! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:08:40'!
-test04
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:25:13'!
+test04ConsoleWinnerX
 	|console game stringAcc |
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
@@ -500,8 +500,8 @@ test04
 	stringAcc := stringAcc, 'Estado: Juego terminado - Ganó X!!'.
 	self assert: (console board =stringAcc ).! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:14:09'!
-test05
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:25:38'!
+test05ConsoleWinnerO
 	|console game stringAcc |
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
@@ -538,8 +538,8 @@ test05
 	self assert: (console board =stringAcc ).
 ! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:20:15'!
-test06
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:25:59'!
+test06ConsoleTied
 	|console game stringAcc |
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
@@ -590,8 +590,8 @@ test06
 	stringAcc := stringAcc, 'Estado: Juego terminado - Empate'.
 	self assert: (console board =stringAcc ).! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 22:11:10'!
-test07
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:27:20'!
+test07ViewPlayXNextO
 	|view game stringAcc|
 	game _ TicTacToe new.
 	view _ TicTacToeView with:game.
@@ -612,8 +612,8 @@ test07
 
 ! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 23:40:05'!
-test08
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:27:45'!
+test08ViewTwoPlays
 	|view game stringAcc|
 	game _ TicTacToe new.
 	view _ TicTacToeView with:game.
@@ -635,8 +635,8 @@ test08
 
 ! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 23:45:10'!
-test09
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:28:16'!
+test09ViewThreePlays
 	|view game stringAcc|
 	game _ TicTacToe new.
 	view _ TicTacToeView with:game.
@@ -659,8 +659,8 @@ test09
 
 ! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:01:44'!
-test10
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:28:40'!
+test10ViewWonX
 	|view game stringAcc|
 	game _ TicTacToe new.
 	view _ TicTacToeView with:game.
@@ -685,8 +685,8 @@ test10
 
 ! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:03:09'!
-test11
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:28:52'!
+test11ViewWonO
 	|view game stringAcc|
 	game _ TicTacToe new.
 	view _ TicTacToeView with:game.
@@ -712,8 +712,8 @@ test11
 
 ! !
 
-!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:10:36'!
-test12
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:29:01'!
+test12ViewTied
 	|view game stringAcc|
 	game _ TicTacToe new.
 	view _ TicTacToeView with:game.
@@ -987,7 +987,7 @@ positionTakenErrorMessage
 
 !classDefinition: #TicTacToeObserver category: #TicTacToe!
 Object subclass: #TicTacToeObserver
-	instanceVariableNames: ''
+	instanceVariableNames: 'board'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TicTacToe'!
@@ -1019,51 +1019,46 @@ markWithXAt: aPosition
 
 !classDefinition: #TicTacToeConsole category: #TicTacToe!
 TicTacToeObserver subclass: #TicTacToeConsole
-	instanceVariableNames: 'log'
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeConsole methodsFor: 'initialize' stamp: 'MG 6/2/2018 01:34:22'!
+!TicTacToeConsole methodsFor: 'initialize' stamp: 'sc 6/4/2018 01:35:48'!
 initializeWith: aGame 
-	log := OrderedCollection new.
+	board := OrderedCollection new.
 	aGame registerObserver: self.! !
 
 
-!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 20:37:55'!
+!TicTacToeConsole methodsFor: 'view' stamp: 'sc 6/4/2018 01:36:16'!
 board
 	|stringAcc|
 	stringAcc _ ''.
-	(1 to: (log size -1)) do: [ :indice | stringAcc := stringAcc, (log at:indice) asString . stringAcc := stringAcc, (String with: Character lf)].
-	stringAcc := stringAcc, (log at:log size) asString. 
+	(1 to: (board size -1)) do: [ :indice | stringAcc := stringAcc, (board at:indice) asString . stringAcc := stringAcc, (String with: Character lf)].
+	stringAcc := stringAcc, (board at:board size) asString. 
 	^stringAcc.! !
 
-!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'sc 5/31/2018 20:47:30'!
+!TicTacToeConsole methodsFor: 'view' stamp: 'sc 6/4/2018 01:36:34'!
 markNextPlaying: aPlaying
-	log addLast: ('Estado: Jugando ', (aPlaying playing asString) ).! !
+	board addLast: ('Estado: Jugando ', (aPlaying playing asString) ).! !
 
-!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'sc 5/31/2018 20:59:14'!
+!TicTacToeConsole methodsFor: 'view' stamp: 'sc 6/4/2018 01:36:39'!
 markTied
-	log addLast: 'Estado: Juego terminado - Empate'.
+	board addLast: 'Estado: Juego terminado - Empate'.
 	! !
 
-!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'sc 5/31/2018 20:59:54'!
+!TicTacToeConsole methodsFor: 'view' stamp: 'sc 6/4/2018 01:36:45'!
 markWinner: winnerState
-	log addLast: 'Estado: Juego terminado - Ganó ', (winnerState playing asString), '!!'.
+	board addLast: 'Estado: Juego terminado - Ganó ', (winnerState playing asString), '!!'.
 	! !
 
-!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:51:59'!
+!TicTacToeConsole methodsFor: 'view' stamp: 'sc 6/4/2018 01:36:51'!
 markWithOAt: aPosition
-	log addLast: 'O marcó en ' , aPosition asString.! !
+	board addLast: 'O marcó en ' , aPosition asString.! !
 
-!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:52:18'!
+!TicTacToeConsole methodsFor: 'view' stamp: 'sc 6/4/2018 01:36:56'!
 markWithXAt: aPosition
-	log addLast: 'X marcó en ' , aPosition asString.! !
-
-
-!TicTacToeConsole methodsFor: 'value' stamp: 'sc 6/3/2018 19:25:09'!
-log
-	^log.! !
+	board addLast: 'X marcó en ' , aPosition asString.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1079,12 +1074,12 @@ with: aGame
 
 !classDefinition: #TicTacToeView category: #TicTacToe!
 TicTacToeObserver subclass: #TicTacToeView
-	instanceVariableNames: 'board'
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 00:53:32'!
+!TicTacToeView methodsFor: 'view' stamp: 'sc 6/4/2018 00:53:32'!
 board
 	|stringAcc lastRow|
 	stringAcc _ ''.
@@ -1108,7 +1103,32 @@ board
 	stringAcc := stringAcc, (board at:10) asString.
 	^stringAcc.! !
 
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 00:52:05'!
+!TicTacToeView methodsFor: 'view' stamp: 'sc 6/4/2018 00:48:12'!
+markNextPlaying: aPlaying
+	board at:10 put:'Playing ', (aPlaying playing asString).! !
+
+!TicTacToeView methodsFor: 'view' stamp: 'sc 6/4/2018 01:04:22'!
+markTied
+	board at:10 put: 'Empate'.! !
+
+!TicTacToeView methodsFor: 'view' stamp: 'sc 6/4/2018 00:44:14'!
+markWinner: winnerState
+	board at:10 put:(winnerState playing asString), ' Won'.! !
+
+!TicTacToeView methodsFor: 'view' stamp: 'MG 6/2/2018 11:49:51'!
+markWithOAt: aPosition
+	board at: 
+		((((aPosition x) -1) * 3) + (aPosition y))
+		put: 'O'.! !
+
+!TicTacToeView methodsFor: 'view' stamp: 'MG 6/2/2018 11:50:04'!
+markWithXAt: aPosition
+	board at: 
+		((((aPosition x) -1) * 3) + (aPosition y))
+		put: 'X'.! !
+
+
+!TicTacToeView methodsFor: 'initialization' stamp: 'sc 6/4/2018 01:30:54'!
 initializeWith: aGame
 	board := Dictionary new: 10.
 	(1 to:9)do: [ :i | board at:i put:' '].
@@ -1119,30 +1139,6 @@ initializeWith: aGame
 		' | | ', (String with: Character lf),
 		'-----', (String with: Character lf),
 		' | | ', (String with: Character lf)."! !
-
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 00:48:12'!
-markNextPlaying: aPlaying
-	board at:10 put:'Playing ', (aPlaying playing asString).! !
-
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 01:04:22'!
-markTied
-	board at:10 put: 'Empate'.! !
-
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 00:44:14'!
-markWinner: winnerState
-	board at:10 put:(winnerState playing asString), ' Won'.! !
-
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 11:49:51'!
-markWithOAt: aPosition
-	board at: 
-		((((aPosition x) -1) * 3) + (aPosition y))
-		put: 'O'.! !
-
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 11:50:04'!
-markWithXAt: aPosition
-	board at: 
-		((((aPosition x) -1) * 3) + (aPosition y))
-		put: 'X'.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
