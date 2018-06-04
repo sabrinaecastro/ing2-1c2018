@@ -409,53 +409,68 @@ assertXWon
 ! !
 
 
-!classDefinition: #TicTacToeTestConsole category: #TicTacToe!
-TestCase subclass: #TicTacToeTestConsole
+!classDefinition: #TicTacToeTestObserver category: #TicTacToe!
+TestCase subclass: #TicTacToeTestObserver
 	instanceVariableNames: 'game'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeTestConsole methodsFor: 'testing' stamp: 'sc 5/31/2018 20:10:23'!
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 20:55:33'!
 test01
-	|console game|
+	|console game stringAcc|
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
 	game markWithXAt: 2@2.
-	self assert: (console log at:1) = 'X marcó en 2@2'.
-	self assert: (console log at:2) = 'Estado: Jugando O'.! !
+	stringAcc _ ''.
+	stringAcc := stringAcc, 'X marcó en 2@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.
 
-!TicTacToeTestConsole methodsFor: 'testing' stamp: 'sc 5/31/2018 20:09:21'!
+	self assert: (console board = stringAcc).! !
+
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:02:13'!
 test02
-	|console game|
+	|console game stringAcc|
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
 	game markWithXAt: 2@2.
 	game markWithOAt: 1@1.
-	self assert: (console log at:1) = 'X marcó en 2@2'.
-	self assert: (console log at:2) = 'Estado: Jugando O'.
-	self assert: (console log at:3) = 'O marcó en 1@1'.
-	self assert: (console log at:4) = 'Estado: Jugando X'.
-! !
+	stringAcc _ ''.
+	stringAcc := stringAcc, 'X marcó en 2@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 1@1'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	self assert: (console board = stringAcc).! !
 
-!TicTacToeTestConsole methodsFor: 'testing' stamp: 'sc 5/31/2018 20:11:57'!
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:04:10'!
 test03
-	|console game|
+	|console game stringAcc|
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
 	game markWithXAt: 2@2.
 	game markWithOAt: 1@1.
 	game markWithXAt: 1@3.
-	self assert: (console log at:1) = 'X marcó en 2@2'.
-	self assert: (console log at:2) = 'Estado: Jugando O'.
-	self assert: (console log at:3) = 'O marcó en 1@1'.
-	self assert: (console log at:4) = 'Estado: Jugando X'.
-	self assert: (console log at:5) = 'X marcó en 1@3'.
-	self assert: (console log at:6) = 'Estado: Jugando O'.! !
+	stringAcc _ ''.
+	stringAcc := stringAcc, 'X marcó en 2@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 1@1'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 1@3'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.
+	self assert: (console board =stringAcc ).! !
 
-!TicTacToeTestConsole methodsFor: 'testing' stamp: 'sc 5/31/2018 20:59:42'!
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:08:40'!
 test04
-	|console game|
+	|console game stringAcc |
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
 	game markWithXAt: 2@2.
@@ -463,21 +478,31 @@ test04
 	game markWithXAt: 1@3.
 	game markWithOAt: 1@2.
 	game markWithXAt: 3@1.
-	self assert: (console log at:1) = 'X marcó en 2@2'.
-	self assert: (console log at:2) = 'Estado: Jugando O'.
-	self assert: (console log at:3) = 'O marcó en 1@1'.
-	self assert: (console log at:4) = 'Estado: Jugando X'.
-	self assert: (console log at:5) = 'X marcó en 1@3'.
-	self assert: (console log at:6) = 'Estado: Jugando O'.
-	self assert: (console log at:7) = 'O marcó en 1@2'.
-	self assert: (console log at:8) = 'Estado: Jugando X'.
-	self assert: (console log at:9) = 'X marcó en 3@1'.
-	self assert: (console log at:10) = 'Estado: Juego terminado - Ganó X!!'.
-! !
+	stringAcc _ ''.
+	stringAcc := stringAcc, 'X marcó en 2@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 1@1'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 1@3'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 1@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 3@1'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Juego terminado - Ganó X!!'.
+	self assert: (console board =stringAcc ).! !
 
-!TicTacToeTestConsole methodsFor: 'testing' stamp: 'sc 6/2/2018 20:10:02'!
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:14:09'!
 test05
-	|console game|
+	|console game stringAcc |
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
 	game markWithXAt: 1@2.
@@ -486,23 +511,36 @@ test05
 	game markWithOAt: 1@1.
 	game markWithXAt: 2@3.
 	game markWithOAt: 3@3.
-	self assert: (console log at:1) = 'X marcó en 1@2'.
-	self assert: (console log at:2) = 'Estado: Jugando O'.
-	self assert: (console log at:3) = 'O marcó en 2@2'.
-	self assert: (console log at:4) = 'Estado: Jugando X'.
-	self assert: (console log at:5) = 'X marcó en 1@3'.
-	self assert: (console log at:6) = 'Estado: Jugando O'.
-	self assert: (console log at:7) = 'O marcó en 1@1'.
-	self assert: (console log at:8) = 'Estado: Jugando X'.
-	self assert: (console log at:9) = 'X marcó en 2@3'.
-	self assert: (console log at:10) = 'Estado: Jugando O'.
-	self assert: (console log at:11) = 'O marcó en 3@3'.
-	self assert: (console log at:12) = 'Estado: Juego terminado - Ganó O!!'.
+	stringAcc _ ''.
+	stringAcc := stringAcc, 'X marcó en 1@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 2@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 1@3'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.	
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 1@1'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 2@3'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.	
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 3@3'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Juego terminado - Ganó O!!'.
+	self assert: (console board =stringAcc ).
 ! !
 
-!TicTacToeTestConsole methodsFor: 'testing' stamp: 'sc 6/2/2018 20:33:34'!
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 21:20:15'!
 test06
-	|console game|
+	|console game stringAcc |
 	game _ TicTacToe new.
 	console := TicTacToeConsole with:game.
 	game markWithXAt: 1@2.
@@ -514,24 +552,195 @@ test06
 	game markWithXAt: 2@1.
 	game markWithOAt: 3@1.
 	game markWithXAt: 3@2.
-	self assert: (console log at:1) = 'X marcó en 1@2'.
-	self assert: (console log at:2) = 'Estado: Jugando O'.
-	self assert: (console log at:3) = 'O marcó en 2@2'.
-	self assert: (console log at:4) = 'Estado: Jugando X'.
-	self assert: (console log at:5) = 'X marcó en 1@3'.
-	self assert: (console log at:6) = 'Estado: Jugando O'.
-	self assert: (console log at:7) = 'O marcó en 1@1'.
-	self assert: (console log at:8) = 'Estado: Jugando X'.
-	self assert: (console log at:9) = 'X marcó en 3@3'.
-	self assert: (console log at:10) = 'Estado: Jugando O'.
-	self assert: (console log at:11) = 'O marcó en 2@3'.
-	self assert: (console log at:12) = 'Estado: Jugando X'.
-	self assert: (console log at:13) = 'X marcó en 2@1'.
-	self assert: (console log at:14) = 'Estado: Jugando O'.
-	self assert: (console log at:15) = 'O marcó en 3@1'.
-	self assert: (console log at:16) = 'Estado: Jugando X'.
-	self assert: (console log at:17) = 'X marcó en 3@2'.
-	self assert: (console log at:18) = 'Estado: Juego terminado - Empate'! !
+	stringAcc _ ''.
+	stringAcc := stringAcc, 'X marcó en 1@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 2@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 1@3'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.	
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 1@1'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 3@3'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.	
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 2@3'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 2@1'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando O'.	
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O marcó en 3@1'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Jugando X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X marcó en 3@2'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Estado: Juego terminado - Empate'.
+	self assert: (console board =stringAcc ).! !
+
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 22:11:10'!
+test07
+	|view game stringAcc|
+	game _ TicTacToe new.
+	view _ TicTacToeView with:game.
+	game markWithXAt: 2@2.
+	stringAcc := ''.
+	stringAcc := stringAcc, ' | | '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, ' |X| '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, ' | | '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Playing O'.
+	self assert: (view board =stringAcc ).
+
+! !
+
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 23:40:05'!
+test08
+	|view game stringAcc|
+	game _ TicTacToe new.
+	view _ TicTacToeView with:game.
+	game markWithXAt: 2@2.
+	game markWithOAt: 1@1.
+	stringAcc := ''.
+	stringAcc := stringAcc, ' | | '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, ' |X| '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O| | '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Playing X'.
+	self assert: (view board =stringAcc ).
+
+! !
+
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/3/2018 23:45:10'!
+test09
+	|view game stringAcc|
+	game _ TicTacToe new.
+	view _ TicTacToeView with:game.
+	game markWithXAt: 2@2.
+	game markWithOAt: 1@1.
+	game markWithXAt: 1@3.
+	stringAcc := ''.
+	stringAcc := stringAcc, 'X| | '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, ' |X| '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O| | '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Playing O'.
+	self assert: (view board =stringAcc ).
+
+! !
+
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:01:44'!
+test10
+	|view game stringAcc|
+	game _ TicTacToe new.
+	view _ TicTacToeView with:game.
+	game markWithXAt: 2@2.
+	game markWithOAt: 1@1.
+	game markWithXAt: 1@3.
+	game markWithOAt: 1@2.
+	game markWithXAt: 3@1.
+	stringAcc := ''.
+	stringAcc := stringAcc, 'X| | '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O|X| '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O| |X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X Won'.
+	self assert: (view board =stringAcc ).
+
+! !
+
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:03:09'!
+test11
+	|view game stringAcc|
+	game _ TicTacToe new.
+	view _ TicTacToeView with:game.
+	game markWithXAt: 2@2.
+	game markWithOAt: 1@1.
+	game markWithXAt: 1@3.
+	game markWithOAt: 3@1.
+	game markWithXAt: 1@2.
+	game markWithOAt: 2@1.
+	stringAcc := ''.
+	stringAcc := stringAcc, 'X| | '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X|X| '.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O|O|O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O Won'.
+	self assert: (view board =stringAcc ).
+
+! !
+
+!TicTacToeTestObserver methodsFor: 'testing' stamp: 'sc 6/4/2018 01:10:36'!
+test12
+	|view game stringAcc|
+	game _ TicTacToe new.
+	view _ TicTacToeView with:game.
+	game markWithXAt: 2@2.
+	game markWithOAt: 1@1.
+	game markWithXAt: 1@3.
+	game markWithOAt: 3@1.
+	game markWithXAt: 2@1.
+	game markWithOAt: 2@3.
+	game markWithXAt: 1@2.
+	game markWithOAt: 3@2.
+	game markWithXAt: 3@3.
+	stringAcc := ''.
+	stringAcc := stringAcc, 'X|O|X'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'X|X|O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, '-----'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'O|X|O'.
+	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, 'Empate'.
+	self assert: (view board =stringAcc ).
+
+! !
 
 
 !classDefinition: #TicTacToe category: #TicTacToe!
@@ -622,18 +831,16 @@ markWithXWhenPlayingXAt: aPosition
 		nextPlayerState: PlayingO
 		winnerState: PlayerXWon.! !
 
-!TicTacToe methodsFor: 'marking board - private' stamp: 'MG 6/2/2018 01:18:51'!
+!TicTacToe methodsFor: 'marking board - private' stamp: 'sc 6/3/2018 19:19:35'!
 stateAfterAddingTo: positions with: nextPlayingState and: winnerState
 
 	(self hasWin: positions) ifTrue: [ 
-		observers collect: [:anObserver | anObserver markWinner: winnerState]. ^ winnerState 
-		].
+		self markWinner: winnerState. 
+		^ winnerState ].
 	self shouldBeTiedWhenNoOneWon ifTrue: [
-		observers collect: [:anObserver | anObserver markTied]. ^ GameTied 
-		].
-	observers collect:[
-		:anObserver | anObserver markNextPlaying: nextPlayingState
-		].
+		self markTied. 
+		^ GameTied ].
+	self markNextPlaying: nextPlayingState.
 	^ nextPlayingState.! !
 
 
@@ -729,6 +936,19 @@ shouldBeTiedWhenNoOneWon
 	^ playerXPositions size = 5 and: [ playerOPositions size = 4 ].! !
 
 
+!TicTacToe methodsFor: 'observers' stamp: 'sc 6/3/2018 19:19:52'!
+markNextPlaying:nextPlayingState
+	observers collect:[:anObserver | anObserver markNextPlaying: nextPlayingState].
+! !
+
+!TicTacToe methodsFor: 'observers' stamp: 'sc 6/3/2018 19:17:29'!
+markTied
+	observers collect: [:anObserver | anObserver markTied].! !
+
+!TicTacToe methodsFor: 'observers' stamp: 'sc 6/3/2018 19:16:04'!
+markWinner:winnerState
+	observers collect: [:anObserver | anObserver markWinner: winnerState].! !
+
 !TicTacToe methodsFor: 'observers' stamp: 'MG 6/2/2018 00:41:25'!
 registerObserver: anObserver
 	observers add: anObserver.! !
@@ -772,25 +992,29 @@ Object subclass: #TicTacToeObserver
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:38:33'!
-initializeWith: aGame! !
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 19:22:32'!
+initializeWith: aGame
+	self subclassResponsibility .! !
 
-!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:35:57'!
-markNextPlaying: aPlaying! !
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 19:22:39'!
+markNextPlaying: aPlaying
+	self subclassResponsibility .! !
 
-!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:36:23'!
-markTied! !
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 19:22:47'!
+markTied
+	self subclassResponsibility .! !
 
-!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:36:44'!
-markWinner: winnerState! !
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 19:22:53'!
+markWinner: winnerState
+	self subclassResponsibility .! !
 
-!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:51:59'!
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 19:23:03'!
 markWithOAt: aPosition
-	^ self.! !
+	self subclassResponsibility .! !
 
-!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 01:52:18'!
+!TicTacToeObserver methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 19:23:10'!
 markWithXAt: aPosition
-	^ self.! !
+	self subclassResponsibility .! !
 
 
 !classDefinition: #TicTacToeConsole category: #TicTacToe!
@@ -806,10 +1030,13 @@ initializeWith: aGame
 	aGame registerObserver: self.! !
 
 
-!TicTacToeConsole methodsFor: 'value' stamp: 'sc 5/31/2018 19:50:07'!
-log
-	^log.! !
-
+!TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 20:37:55'!
+board
+	|stringAcc|
+	stringAcc _ ''.
+	(1 to: (log size -1)) do: [ :indice | stringAcc := stringAcc, (log at:indice) asString . stringAcc := stringAcc, (String with: Character lf)].
+	stringAcc := stringAcc, (log at:log size) asString. 
+	^stringAcc.! !
 
 !TicTacToeConsole methodsFor: 'as yet unclassified' stamp: 'sc 5/31/2018 20:47:30'!
 markNextPlaying: aPlaying
@@ -833,6 +1060,11 @@ markWithOAt: aPosition
 markWithXAt: aPosition
 	log addLast: 'X marcó en ' , aPosition asString.! !
 
+
+!TicTacToeConsole methodsFor: 'value' stamp: 'sc 6/3/2018 19:25:09'!
+log
+	^log.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TicTacToeConsole class' category: #TicTacToe!
@@ -852,37 +1084,53 @@ TicTacToeObserver subclass: #TicTacToeView
 	poolDictionaries: ''
 	category: 'TicTacToe'!
 
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 13:24:03'!
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 00:53:32'!
 board
 	|stringAcc lastRow|
 	stringAcc _ ''.
-	(1 to: 2) do: [ :row|
-		(1 to: 3) do: [ :column |
-			stringAcc := stringAcc, (board at:(((row -1)* 3) + column)).
+	(3 to: 2 by:(-1)) do: [ :row |
+		(1 to: 2) do: [ :column|	
+			stringAcc := stringAcc, (board at:(((column -1)* 3) + row)).
 			stringAcc := stringAcc, '|'
 		]. 
-	     stringAcc := stringAcc, (String with: Character lf).
+		stringAcc := stringAcc, (board at:(((3 -1)* 3) + row)).
+		stringAcc := stringAcc, (String with: Character lf).
 		stringAcc := stringAcc, '-----'.
-		stringAcc := stringAcc, (String with: Character lf).		
+		stringAcc := stringAcc, (String with: Character lf).
 	].
-	lastRow _ 3.
-	(1 to: 3) do: [ :column |
-		stringAcc := stringAcc, (board at:(((lastRow -1)* 3) + column)).
+	lastRow _ 1.
+	(1 to: 2) do: [ :column |
+		stringAcc := stringAcc, (board at:(((column -1)* 3) + lastRow)).
 		stringAcc := stringAcc, '|'
 	]. 
+	stringAcc := stringAcc, (board at:(((3 -1)* 3) + lastRow)).
 	stringAcc := stringAcc, (String with: Character lf).
+	stringAcc := stringAcc, (board at:10) asString.
 	^stringAcc.! !
 
-!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 11:27:05'!
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 00:52:05'!
 initializeWith: aGame
+	board := Dictionary new: 10.
+	(1 to:9)do: [ :i | board at:i put:' '].
 	aGame registerObserver: self.
-	board _  #(' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ').
 		"(String with: Character lf),
 		' | | ', (String with: Character lf),
 		'-----', (String with: Character lf),
 		' | | ', (String with: Character lf),
 		'-----', (String with: Character lf),
 		' | | ', (String with: Character lf)."! !
+
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 00:48:12'!
+markNextPlaying: aPlaying
+	board at:10 put:'Playing ', (aPlaying playing asString).! !
+
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 01:04:22'!
+markTied
+	board at:10 put: 'Empate'.! !
+
+!TicTacToeView methodsFor: 'as yet unclassified' stamp: 'sc 6/4/2018 00:44:14'!
+markWinner: winnerState
+	board at:10 put:(winnerState playing asString), ' Won'.! !
 
 !TicTacToeView methodsFor: 'as yet unclassified' stamp: 'MG 6/2/2018 11:49:51'!
 markWithOAt: aPosition
@@ -895,6 +1143,16 @@ markWithXAt: aPosition
 	board at: 
 		((((aPosition x) -1) * 3) + (aPosition y))
 		put: 'X'.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TicTacToeView class' category: #TicTacToe!
+TicTacToeView class
+	instanceVariableNames: ''!
+
+!TicTacToeView class methodsFor: 'as yet unclassified' stamp: 'sc 6/3/2018 19:55:21'!
+with:aGame
+	^self new initializeWith:aGame.! !
 
 
 !classDefinition: #TicTacToeState category: #TicTacToe!
