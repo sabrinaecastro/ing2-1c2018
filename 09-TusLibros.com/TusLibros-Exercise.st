@@ -5,122 +5,187 @@ TestCase subclass: #TusLibrosTest
 	poolDictionaries: ''
 	category: 'TusLibros-Exercise'!
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'MG 6/4/2018 21:13:37'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 13:19:21'!
+supermarket0
+	|listProduct|
+	listProduct := OrderedCollection new.	
+	^Supermarket for:listProduct.
+	! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:05:01'!
+supermarket1
+	|listProduct|
+	listProduct := OrderedCollection new.	
+	listProduct  add: 'La mitad del cielo'.
+	^Supermarket for:listProduct.
+	! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:05:30'!
+supermarket2
+	|listProduct|
+	listProduct := OrderedCollection new.	
+	listProduct add: 'La mitad del cielo'.
+	listProduct add: 'Yo niña, yo princesa'.
+	^Supermarket for:listProduct.
+	! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 14:46:37'!
 test01newCartIsEmpty
 	|cart|
-	cart := Cart new.
+	"supermarket0: 
+		- No tiene libros
+	"
+	cart := Cart for:self supermarket0.
 	self assert: cart isEmpty.! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/6/2018 22:29:46'!
-test02cartIsNotEmptyWhenProductAdded
-	| cart product |
-	cart _ Cart new.
-	product _ Product new.
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:12:09'!
+test02aCartIsNotEmptyWhenProductAdded
+	| cart product supermarket|
+	"supermarket1: 
+		- La mitad del cielo
+	"
+	supermarket  := self supermarket1.
+	product := 'La mitad del cielo'.
+	cart _ Cart for:supermarket.
 	cart addProduct: product.
 	self assert: (cart loaded: product).! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 00:00:35'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:21:34'!
+test02bCartIsNotEmptyWhenProductAdded
+	| cart product supermarket|
+	"supermarket1: 
+		- La mitad del cielo
+	"
+	supermarket  := self supermarket1.
+	product := 'Yo Niña, yo princesa'.
+	cart _ Cart for:supermarket.
+	self should:[ cart addProduct: product] raise: Error withMessageText: Cart notCanAddProductThatIsNotInTheListCartErrorMessage.! !
+
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:29:07'!
 test03cartProductTwoAddedForAddProduct
-	| cart product |
-	cart _ Cart new.
-	product _ Product new.
+	| cart product supermarket |
+	supermarket  := self supermarket1.
+	cart _ Cart for:supermarket .
+	product _ 'La mitad del cielo'.
 	cart addProduct: product.
 	cart addProduct: product.
 	self assert: ((cart quantity: product) =2).! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 00:02:03'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:30:30'!
 test04cartProductTwoAddedForAddProductWith
-	| cart product |
-	cart _ Cart new.
-	product _ Product new.
+	| cart product supermarket |
+	supermarket  := self supermarket1.
+	cart _ Cart for:supermarket .
+	product _ 'La mitad del cielo'.
 	cart addProduct: product withQuantity: 2.
 	self assert: ((cart quantity: product) =2).! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 00:03:04'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:32:36'!
 test05cantRemoveProductLoadedCartWithAddProduct
-	| cart product |
-	cart := Cart new.
-	product := Product new.
+	| cart product supermarket |
+	supermarket  := self supermarket1.
+	cart _ Cart for:supermarket .
+	product _ 'La mitad del cielo'.
 	cart addProduct: product .
 	cart removeProduct: product.
 	self deny: (cart loaded: product).! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 00:03:59'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:33:29'!
 test06cantRemoveProductLoadedCartWithAddProductWithQuantity
-	| cart product |
-	cart := Cart new.
-	product := Product new.
+| cart product supermarket |
+	supermarket  := self supermarket1.
+	cart _ Cart for:supermarket .
+	product _ 'La mitad del cielo'.
 	cart addProduct: product withQuantity: 2.
 	cart removeProduct: product.
 	self deny: (cart loaded: product).! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 00:04:19'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:33:50'!
 test07cantRemoveProductLoadedCart
-	| cart product |
-	cart := Cart new.
-	product := Product new.
+	| cart product supermarket |
+	supermarket  := self supermarket1.
+	cart _ Cart for:supermarket .
+	product _ 'La mitad del cielo'.
 	cart addProduct: product .
 	cart removeProduct: product.
 	self deny: (cart loaded: product).! !
 
-!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 00:05:06'!
+!TusLibrosTest methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:34:01'!
 test08cantRemoveProductFromEmptyCart
-	| cart product |
-	cart := Cart new.
-	product := Product new.
+	| cart product supermarket |
+	supermarket  := self supermarket1.
+	cart _ Cart for:supermarket .
+	product _ 'La mitad del cielo'.
 	self should:[ cart removeProduct: product] raise: Error withMessageText: Cart notCanRemoveEmptyCartErrorMessage.! !
 
 
 !classDefinition: #Cart category: #'TusLibros-Exercise'!
 Object subclass: #Cart
-	instanceVariableNames: 'state list'
+	instanceVariableNames: 'state listOrders supermarket'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros-Exercise'!
 
-!Cart methodsFor: 'add product private' stamp: 'sc 6/6/2018 23:41:51'!
-addProductWithCartEmpty:aProduct
-	list at: aProduct put:1.
-	state := LoadedState for: self.! !
+!Cart methodsFor: 'add product private' stamp: 'sc 6/7/2018 13:52:38'!
+addProductThatIsInTheList:aProduct withQuantity:aQuantity
+	state addProduct: aProduct withQuantity: aQuantity with:self.
+	! !
 
-!Cart methodsFor: 'add product private' stamp: 'sc 6/6/2018 23:51:49'!
-addProductWithCartEmpty:aProduct withQuantity:aQuantity
-	list at: aProduct put:aQuantity.
-	state := LoadedState for: self.! !
+!Cart methodsFor: 'add product private' stamp: 'sc 6/7/2018 15:39:53'!
+addProductThatIsNotInTheList:aProduct withQuantity:aQuantity
+	^self error: self class notCanAddProductThatIsNotInTheListCartErrorMessage.
+						! !
 
-!Cart methodsFor: 'add product private' stamp: 'sc 6/6/2018 23:47:52'!
-addProductWithCartLoaded:aProduct withQuantity:aQuantity
-	|cantidad|
-	cantidad := list at:aProduct.
-	list at: aProduct put:cantidad+aQuantity.! !
+!Cart methodsFor: 'add product private' stamp: 'sc 6/7/2018 12:41:25'!
+addProductWithCartEmpty: aProduct
+	listOrders
+		at: aProduct
+		put: 1.
+	state _ LoadedState for: self.! !
+
+!Cart methodsFor: 'add product private' stamp: 'sc 6/7/2018 12:41:25'!
+addProductWithCartEmpty: aProduct withQuantity: aQuantity
+	listOrders
+		at: aProduct
+		put: aQuantity.
+	state _ LoadedState for: self.! !
+
+!Cart methodsFor: 'add product private' stamp: 'sc 6/7/2018 12:41:25'!
+addProductWithCartLoaded: aProduct withQuantity: aQuantity
+	| cantidad |
+	cantidad _ listOrders at: aProduct.
+	listOrders
+		at: aProduct
+		put: cantidad + aQuantity.! !
 
 
-!Cart methodsFor: 'add product' stamp: 'sc 6/6/2018 23:48:36'!
+!Cart methodsFor: 'add product' stamp: 'sc 6/7/2018 13:51:01'!
 addProduct: aProduct 
-	state addProduct: aProduct withQuantity:1 with:self.! !
+	supermarket addProduct:aProduct withQuantity:1 with:self.! !
 
-!Cart methodsFor: 'add product' stamp: 'sc 6/6/2018 23:44:56'!
+!Cart methodsFor: 'add product' stamp: 'sc 6/7/2018 13:50:54'!
 addProduct: aProduct withQuantity:aQuantity
-	state addProduct: aProduct withQuantity: aQuantity with:self.! !
+	supermarket addProduct:aProduct withQuantity:aQuantity with:self.! !
 
 
-!Cart methodsFor: 'initialization' stamp: 'sc 6/6/2018 23:35:19'!
-initialize
-	state:=EmptyState for: self.
-	list := Dictionary new.! !
+!Cart methodsFor: 'initialization' stamp: 'sc 6/7/2018 12:56:02'!
+initialize:aSupermarket
+	state _ EmptyState for: self.
+	listOrders _ Dictionary new.
+	supermarket := aSupermarket.! !
 
 
-!Cart methodsFor: 'querys' stamp: 'sc 6/6/2018 22:27:41'!
+!Cart methodsFor: 'querys' stamp: 'sc 6/7/2018 12:41:25'!
 isEmpty
-	^list isEmpty.! !
+	^ listOrders isEmpty.! !
 
-!Cart methodsFor: 'querys' stamp: 'sc 6/6/2018 23:37:39'!
+!Cart methodsFor: 'querys' stamp: 'sc 6/7/2018 12:41:25'!
 loaded: aProduct
-	^list includesKey: aProduct .! !
+	^ listOrders includesKey: aProduct.! !
 
-!Cart methodsFor: 'querys' stamp: 'sc 6/6/2018 23:59:12'!
-quantity:aProduct
-	^list at: aProduct.! !
+!Cart methodsFor: 'querys' stamp: 'sc 6/7/2018 12:41:25'!
+quantity: aProduct
+	^ listOrders at: aProduct.! !
 
 
 !Cart methodsFor: 'remove product' stamp: 'sc 6/6/2018 22:36:47'!
@@ -132,16 +197,24 @@ removeProduct: aProduct
 removeProductWithCartEmpty: aProduct
 	self error: self class notCanRemoveEmptyCartErrorMessage.! !
 
-!Cart methodsFor: 'remove product private' stamp: 'sc 6/6/2018 23:47:20'!
-removeProductWithCartLoaded:aProduct
-	(self loaded: aProduct) ifFalse: [self error: self class notCanRemoveProductNoLoadedErrorMessage].
-	list removeKey: aProduct .! !
+!Cart methodsFor: 'remove product private' stamp: 'sc 6/7/2018 12:41:25'!
+removeProductWithCartLoaded: aProduct
+	(self loaded: aProduct) ifFalse: [ self error: self class notCanRemoveProductNoLoadedErrorMessage ].
+	listOrders removeKey: aProduct.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Cart class' category: #'TusLibros-Exercise'!
 Cart class
 	instanceVariableNames: ''!
+
+!Cart class methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 13:00:14'!
+for: aSupermarket
+	^self new initialize: aSupermarket.! !
+
+!Cart class methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 13:45:01'!
+notCanAddProductThatIsNotInTheListCartErrorMessage
+	^'No puede agregar productos que no estan la lista del supermercado'.! !
 
 !Cart class methodsFor: 'as yet unclassified' stamp: 'sc 6/6/2018 22:47:14'!
 notCanRemoveEmptyCartErrorMessage
@@ -220,7 +293,63 @@ addProduct: aProduct withQuantity:aQuantity with:aCart
 
 !classDefinition: #Product category: #'TusLibros-Exercise'!
 Object subclass: #Product
-	instanceVariableNames: 'listCard'
+	instanceVariableNames: 'id name sumpermarkets'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros-Exercise'!
+
+!Product methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 14:59:59'!
+description
+	^name.! !
+
+!Product methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 14:59:43'!
+id
+	^id.! !
+
+!Product methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 14:49:08'!
+initialize:aName
+	name:= aName.! !
+
+!Product methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 14:58:03'!
+initialize:number with: aName
+	id := number.
+	name:= aName.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Product class' category: #'TusLibros-Exercise'!
+Product class
+	instanceVariableNames: ''!
+
+!Product class methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 14:58:17'!
+for: number with: aName
+	^self new initialize: number  with:aName.	! !
+
+
+!classDefinition: #Supermarket category: #'TusLibros-Exercise'!
+Object subclass: #Supermarket
+	instanceVariableNames: 'listProducts'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros-Exercise'!
+
+!Supermarket methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:15:32'!
+addProduct:aProduct withQuantity:aQuantity with:aCart
+	(listProducts includes: aProduct ) ifFalse:[aCart addProductThatIsNotInTheList:aProduct withQuantity:aQuantity].
+	aCart addProductThatIsInTheList:aProduct withQuantity:aQuantity.
+	! !
+
+!Supermarket methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 15:00:50'!
+initializeWith:aListIdProduct
+	listProducts :=aListIdProduct.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Supermarket class' category: #'TusLibros-Exercise'!
+Supermarket class
+	instanceVariableNames: ''!
+
+!Supermarket class methodsFor: 'as yet unclassified' stamp: 'sc 6/7/2018 13:00:21'!
+for: aListProduct
+	^self new initializeWith:aListProduct.
+	! !
