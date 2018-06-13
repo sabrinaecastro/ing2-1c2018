@@ -1,9 +1,9 @@
-!classDefinition: #CartTest category: #TusLibros!
+!classDefinition: #CartTest category: #TusLibros3!
 TestCase subclass: #CartTest
 	instanceVariableNames: 'testObjectsFactory'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibros'!
+	category: 'TusLibros3'!
 
 !CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
 test01NewCartsAreCreatedEmpty
@@ -98,14 +98,24 @@ setUp
 	testObjectsFactory := StoreTestObjectsFactory new.! !
 
 
-!classDefinition: #CashierTest category: #TusLibros!
+!classDefinition: #CashierTest category: #TusLibros3!
 TestCase subclass: #CashierTest
 	instanceVariableNames: 'testObjectsFactory merchantResponseBlock'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibros'!
+	category: 'TusLibros3'!
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:41'!
+!CashierTest methodsFor: 'Running' stamp: 'HernanWilkinson 6/17/2013 18:11'!
+setUp 
+
+	testObjectsFactory := StoreTestObjectsFactory new.! !
+
+
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:57:15'!
+cashier: cashier debits: amount from: aCreditCard
+	merchantResponseBlock value.! !
+
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:57:29'!
 test01CanNotCheckoutAnEmptyCart
 
 	| salesBook |
@@ -122,7 +132,7 @@ test01CanNotCheckoutAnEmptyCart
 			self assert: anError messageText = Cashier cartCanNotBeEmptyErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 20:27:04'!
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:57:40'!
 test02CalculatedTotalIsCorrect
 
 	| cart cashier |
@@ -130,10 +140,10 @@ test02CalculatedTotalIsCorrect
 	cart := testObjectsFactory createCart.
 	cart add: 2 of: testObjectsFactory itemSellByTheStore.
 	
-	cashier :=  Cashier toCheckout: cart charging: testObjectsFactory notExpiredCreditCard on: testObjectsFactory today registeringOn: OrderedCollection new.
+	cashier :=  Cashier toCheckout: cart charging: testObjectsFactory notExpiredCreditCard on: testObjectsFactory today registeringOn: (OrderedCollection new) withMerchantProcessor:self.
 	self assert: cashier checkOut = (testObjectsFactory itemSellByTheStorePrice * 2)! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:45'!
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:57:50'!
 test03CanNotCheckoutWithAnExpiredCreditCart
 
 	| cart salesBook |
@@ -153,7 +163,7 @@ test03CanNotCheckoutWithAnExpiredCreditCart
 			self assert: anError messageText = Cashier canNotChargeAnExpiredCreditCardErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:45'!
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:58:00'!
 test04CheckoutRegistersASale
 
 	| cart cashier salesBook total |
@@ -166,13 +176,14 @@ test04CheckoutRegistersASale
 		toCheckout: cart 
 		charging: testObjectsFactory notExpiredCreditCard
 		on: testObjectsFactory today
-		registeringOn: salesBook.
+		registeringOn: salesBook
+		withMerchantProcessor:self.
 	total := cashier checkOut.
 					
 	self assert: salesBook notEmpty.
 	self assert: salesBook first total = total.! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 21:18:26'!
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:58:10'!
 test05CanNotCheckoutWithAStolenCreditCard
 	| cart salesBook cashier |
 		
@@ -195,33 +206,78 @@ test05CanNotCheckoutWithAStolenCreditCard
 			self assert: anError messageText = Cashier canNotCheckoutWithAStolenCreditCardErrorMessage.
 			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 21:19:57'!
-test06CanNotCheckoutWithAnInvalidCreditCard! !
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:58:31'!
+test06CanNotCheckoutWithAnInvalidCreditCard
+	| cart salesBook cashier |
+		
+	cart := testObjectsFactory createCart.
+	cart add: testObjectsFactory itemSellByTheStore.
+	salesBook := OrderedCollection new.
+		
+	cashier := Cashier toCheckout: cart 
+		charging: testObjectsFactory notExpiredCreditCard 
+		on: testObjectsFactory today
+		registeringOn: salesBook 
+		withMerchantProcessor:self.
+		
+	merchantResponseBlock := [ cashier reportInvalidCreditCard ].
+	
+	self
+		should: [cashier checkOut ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = Cashier canNotChargeAnInvalidCreditCardErrorMessage.
+			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 19:30:30'!
-test07CanNotCheckoutWithACreditCardWithoutFunds! !
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:58:42'!
+test07CanNotCheckoutWithACreditCardWithoutFunds
+	| cart salesBook cashier |
+		
+	cart := testObjectsFactory createCart.
+	cart add: testObjectsFactory itemSellByTheStore.
+	salesBook := OrderedCollection new.
+		
+	cashier := Cashier toCheckout: cart 
+		charging: testObjectsFactory notExpiredCreditCard 
+		on: testObjectsFactory today
+		registeringOn: salesBook 
+		withMerchantProcessor:self.
+		
+	merchantResponseBlock := [ cashier reportCreditCardWithoutFunds ].
+	
+	self
+		should: [cashier checkOut ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = Cashier canNotChargeACreditCardWithoutFundsErrorMessage.
+			self assert: salesBook isEmpty ]! !
 
-!CashierTest methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 19:32:02'!
-test08CheckoutWithACreditCardWithFunds! !
-
-
-!CashierTest methodsFor: 'Running' stamp: 'HernanWilkinson 6/17/2013 18:11'!
-setUp 
-
-	testObjectsFactory := StoreTestObjectsFactory new.! !
-
-
-!CashierTest methodsFor: 'merchant processor responses' stamp: 'SC 6/11/2018 21:13:27'!
-cashier: cashier debits: amount from: aCreditCard
-	merchantResponseBlock value.! !
+!CashierTest methodsFor: 'merchant processor responses' stamp: 'sc 6/12/2018 23:59:02'!
+test08CheckoutWithACreditCardWithFunds
+	| cart salesBook cashier mount |
+		
+	cart := testObjectsFactory createCart.
+	cart add: testObjectsFactory itemSellByTheStore.
+	salesBook := OrderedCollection new.
+		
+	cashier := Cashier toCheckout: cart 
+		charging: testObjectsFactory notExpiredCreditCard 
+		on: testObjectsFactory today
+		registeringOn: salesBook 
+		withMerchantProcessor:self.
+		
+	merchantResponseBlock := [ cashier reportCreditCardWithFunds ].
+	mount := cashier checkOut.
+	self deny: salesBook isEmpty.
+	self assert: ( (salesBook at:1)  total = mount).! !
 
 
-!classDefinition: #Cart category: #TusLibros!
+!classDefinition: #Cart category: #TusLibros3!
 Object subclass: #Cart
 	instanceVariableNames: 'catalog items'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibros'!
+	category: 'TusLibros3'!
 
 !Cart methodsFor: 'error messages' stamp: 'HernanWilkinson 6/17/2013 17:45'!
 invalidItemErrorMessage
@@ -295,7 +351,7 @@ add: aQuantity of: anItem
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cart class' category: #TusLibros!
+!classDefinition: 'Cart class' category: #TusLibros3!
 Cart class
 	instanceVariableNames: ''!
 
@@ -305,14 +361,14 @@ acceptingItemsOf: aCatalog
 	^self new initializeAcceptingItemsOf: aCatalog ! !
 
 
-!classDefinition: #Cashier category: #TusLibros!
+!classDefinition: #Cashier category: #TusLibros3!
 Object subclass: #Cashier
 	instanceVariableNames: 'cart creditCart salesBook merchant'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibros'!
+	category: 'TusLibros3'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 20:06:57'!
+!Cashier methodsFor: 'checkOut' stamp: 'SC 6/11/2018 20:06:57'!
 checkOut
 	
 	| priceList total |
@@ -327,14 +383,29 @@ checkOut
 	
 	^total! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:42'!
-initializeToCheckout: aCart charging: aCreditCard registeringOn: aSalesBook
-	
-	cart := aCart.
-	creditCart := aCreditCard.
-	salesBook := aSalesBook! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 19:48:40'!
+!Cashier methodsFor: 'report' stamp: 'sc 6/13/2018 00:02:19'!
+reportCreditCardWithFunds
+	^true.! !
+
+!Cashier methodsFor: 'report' stamp: 'sc 6/13/2018 00:03:45'!
+reportCreditCardWithoutFunds
+	self error: self class canNotChargeACreditCardWithoutFundsErrorMessage ! !
+
+!Cashier methodsFor: 'report' stamp: 'sc 6/13/2018 00:04:31'!
+reportInvalidCreditCard
+	self error: self class canNotChargeAnInvalidCreditCardErrorMessage.! !
+
+!Cashier methodsFor: 'report' stamp: 'sc 6/13/2018 00:04:00'!
+reportStolenCreditCard
+	self error: self class canNotCheckoutWithAStolenCreditCardErrorMessage.! !
+
+!Cashier methodsFor: 'report' stamp: 'sc 6/13/2018 00:04:14'!
+reportStolenCreditCard: aCreditCard withAmount: amount
+	self error: self class canNotCheckoutWithAStolenCreditCardErrorMessage.! !
+
+
+!Cashier methodsFor: 'initialization' stamp: 'sc 6/13/2018 00:01:02'!
 initializeToCheckout: aCart charging: aCreditCard registeringOn: aSalesBook withMerchantProcessor: aMerchantProcessor
 	
 	cart := aCart.
@@ -342,17 +413,9 @@ initializeToCheckout: aCart charging: aCreditCard registeringOn: aSalesBook with
 	salesBook := aSalesBook.
 	merchant := aMerchantProcessor.! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 20:46:43'!
-reportStolenCreditCard
-	self error: self class canNotCheckoutWithAStolenCreditCardErrorMessage.! !
-
-!Cashier methodsFor: 'as yet unclassified' stamp: 'SC 6/11/2018 20:10:05'!
-reportStolenCreditCard: aCreditCard withAmount: amount
-	self error: self class canNotCheckoutWithAStolenCreditCardErrorMessage.! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cashier class' category: #TusLibros!
+!classDefinition: 'Cashier class' category: #TusLibros3!
 Cashier class
 	instanceVariableNames: ''!
 
@@ -375,6 +438,11 @@ assertIsNotExpired: aCreditCard on: aDate
 	
 	(aCreditCard isExpiredOn: aDate) ifTrue: [ self error: self canNotChargeAnExpiredCreditCardErrorMessage ]! !
 
+
+!Cashier class methodsFor: 'error messages' stamp: 'sc 6/12/2018 23:22:43'!
+canNotChargeACreditCardWithoutFundsErrorMessage
+	
+	^'Can not charge an credit card Without Funds'! !
 
 !Cashier class methodsFor: 'error messages' stamp: 'HernanWilkinson 6/17/2013 18:21'!
 canNotChargeAnExpiredCreditCardErrorMessage
@@ -401,12 +469,12 @@ toCheckout: aCart charging: aCreditCard on: aDateAndTime registeringOn: aSalesBo
 	^ Cashier new initializeToCheckout:  aCart charging:  aCreditCard registeringOn:  aSalesBook withMerchantProcessor: aMerchantProcessor.! !
 
 
-!classDefinition: #CreditCard category: #TusLibros!
+!classDefinition: #CreditCard category: #TusLibros3!
 Object subclass: #CreditCard
 	instanceVariableNames: 'expiration'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibros'!
+	category: 'TusLibros3'!
 
 !CreditCard methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:38'!
 initializeExpiringOn: aMonth 
@@ -420,7 +488,7 @@ isExpiredOn: aDate
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'CreditCard class' category: #TusLibros!
+!classDefinition: 'CreditCard class' category: #TusLibros3!
 CreditCard class
 	instanceVariableNames: ''!
 
@@ -430,16 +498,16 @@ expiringOn: aMonth
 	^self new initializeExpiringOn: aMonth! !
 
 
-!classDefinition: #MonthOfYear category: #TusLibros!
+!classDefinition: #MonthOfYear category: #TusLibros3!
 Object subclass: #MonthOfYear
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibros'!
+	category: 'TusLibros3'!
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'MonthOfYear class' category: #TusLibros!
+!classDefinition: 'MonthOfYear class' category: #TusLibros3!
 MonthOfYear class
 	instanceVariableNames: ''!
 
@@ -448,12 +516,12 @@ of: aDate
 	self shouldBeImplemented.! !
 
 
-!classDefinition: #Sale category: #TusLibros!
+!classDefinition: #Sale category: #TusLibros3!
 Object subclass: #Sale
 	instanceVariableNames: 'total'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibros'!
+	category: 'TusLibros3'!
 
 !Sale methodsFor: 'as yet unclassified' stamp: 'HernanWilkinson 6/17/2013 18:48'!
 total
@@ -468,7 +536,7 @@ initializeTotal: aTotal
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Sale class' category: #TusLibros!
+!classDefinition: 'Sale class' category: #TusLibros3!
 Sale class
 	instanceVariableNames: ''!
 
@@ -479,12 +547,12 @@ of: aTotal
 	^self new initializeTotal: aTotal ! !
 
 
-!classDefinition: #StoreTestObjectsFactory category: #TusLibros!
+!classDefinition: #StoreTestObjectsFactory category: #TusLibros3!
 Object subclass: #StoreTestObjectsFactory
 	instanceVariableNames: 'today'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibros'!
+	category: 'TusLibros3'!
 
 !StoreTestObjectsFactory methodsFor: 'cart' stamp: 'HernanWilkinson 6/17/2013 18:08'!
 createCart
