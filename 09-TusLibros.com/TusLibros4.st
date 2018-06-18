@@ -272,6 +272,46 @@ test01CanCreateCartWithClientIdAndPassword
 	
 	self assert: (response at:1) equals: $0.! !
 
+!StoreRestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'sc 6/18/2018 11:26:53'!
+test02CanNotCreateCartWithInvalidUser
+	| clientId password request storeRestInterface |
+	
+	
+	clientId := testObjectsFactory clientIdInvalid.
+	password := testObjectsFactory passwordForClientId.
+	
+	request := testObjectsFactory baseStoreUrl, '/createCart?clientId=', clientId, '&password=', password.
+	
+	storeRestInterface := (StoreRestInterface new ) initializeWithClientLoginInformation: (testObjectsFactory clientLogins).
+		
+	self
+		should: [storeRestInterface execute: request]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError  |
+			self assert: anError messageText =  StoreInterface invalidUserOrPasswordErrorMessage .
+]
+	! !
+
+!StoreRestInterfaceTest methodsFor: 'as yet unclassified' stamp: 'sc 6/18/2018 11:33:59'!
+test03CanNotCreateCartWithPaswordInvalid
+	| clientId password request storeRestInterface |
+	
+	
+	clientId := testObjectsFactory clientId .
+	password := testObjectsFactory passwordInvalid.
+	
+	request := testObjectsFactory baseStoreUrl, '/createCart?clientId=', clientId, '&password=', password.
+	
+	storeRestInterface := (StoreRestInterface new ) initializeWithClientLoginInformation: (testObjectsFactory clientLogins).
+		
+	self
+		should: [storeRestInterface execute: request]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError  |
+			self assert: anError messageText =  StoreInterface invalidUserOrPasswordErrorMessage .
+]
+	! !
+
 
 !classDefinition: #Cart category: #TusLibros!
 Object subclass: #Cart
@@ -538,11 +578,12 @@ Object subclass: #StoreInterface
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!StoreInterface methodsFor: 'as yet unclassified' stamp: 'MG 6/18/2018 01:52:38'!
+!StoreInterface methodsFor: 'as yet unclassified' stamp: 'sc 6/18/2018 11:33:08'!
 createCartForClientId: aClientId andPassword: aPassword 
 	| newStoreCart |
 	"TODO: Chequear id / password"
 	newStoreCart  :=(StoreCart newForClient: aClientId). 
+	((clientsLogins associations) includes: (Association key: aClientId value: aPassword) ) ifFalse:[^self error: self class invalidUserOrPasswordErrorMessage]. 
 	storeCarts add: newStoreCart.
 	"devolver cartId"
 	^ (storeCarts find: newStoreCart) asString.! !
@@ -558,6 +599,14 @@ initializeWithClientLoginInformation: aClientLoginInformation
 !classDefinition: 'StoreInterface class' category: #TusLibros!
 StoreInterface class
 	instanceVariableNames: ''!
+
+!StoreInterface class methodsFor: 'as yet unclassified' stamp: 'sc 6/18/2018 10:31:49'!
+invalidUserErrorMessage
+	^'El usuario es invalido'.! !
+
+!StoreInterface class methodsFor: 'as yet unclassified' stamp: 'sc 6/18/2018 10:53:46'!
+invalidUserOrPasswordErrorMessage
+	^'El usuario o la contraseña es invalido'.! !
 
 !StoreInterface class methodsFor: 'as yet unclassified' stamp: 'MG 6/18/2018 02:19:22'!
 newWithClientLoginInformation: clientLoginInformation
@@ -587,6 +636,16 @@ execute: aRequest
 !StoreRestInterface methodsFor: 'as yet unclassified' stamp: 'MG 6/18/2018 02:03:25'!
 initializeWithClientLoginInformation: clientLoginInformation
 	store := StoreInterface newWithClientLoginInformation: clientLoginInformation .! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'StoreRestInterface class' category: #TusLibros!
+StoreRestInterface class
+	instanceVariableNames: ''!
+
+!StoreRestInterface class methodsFor: 'error' stamp: 'sc 6/18/2018 10:06:23'!
+invalidUserErrorMessage
+	^'El usuario es invalido'.! !
 
 
 !classDefinition: #StoreTestObjectsFactory category: #TusLibros!
@@ -656,10 +715,21 @@ baseStoreUrl
 clientId
 	^'1'.! !
 
-!StoreTestObjectsFactory methodsFor: 'store' stamp: 'MG 6/18/2018 02:13:27'!
+!StoreTestObjectsFactory methodsFor: 'store' stamp: 'sc 6/18/2018 10:04:29'!
+clientIdInvalid
+	^'Invalido'.! !
+
+!StoreTestObjectsFactory methodsFor: 'store' stamp: 'sc 6/18/2018 11:13:51'!
 clientLogins
-	^ (Dictionary new) add:(Association key: self clientId value: self passwordForClientId).! !
+	|dicc|
+	dicc := Dictionary new.
+	dicc add:(Association key: self clientId value: self passwordForClientId).
+	^dicc.! !
 
 !StoreTestObjectsFactory methodsFor: 'store' stamp: 'MG 6/18/2018 00:56:22'!
 passwordForClientId
 	^'qwerty'.! !
+
+!StoreTestObjectsFactory methodsFor: 'store' stamp: 'sc 6/18/2018 11:34:19'!
+passwordInvalid
+	^'invalid'.! !
